@@ -31,8 +31,7 @@
         "srmklive/paypal": "^3.0",
         "stripe/stripe-php": "^7.57",
         "twilio/sdk": "^6.10",
-        "xendit/xendit-php": "^5.0",
-        "ext-http": "*"
+        "xendit/xendit-php": "^5.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
