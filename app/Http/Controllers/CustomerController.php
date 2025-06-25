@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
+use App\Models\Company;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use App\Models\CustomerGroup;
 use App\Models\Customer;
@@ -39,13 +42,15 @@ class CustomerController extends Controller
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
             $custom_fields = CustomField::where([
-                                ['belongs_to', 'customer'],
-                                ['is_table', true]
-                            ])->pluck('name');
+                ['belongs_to', 'customer'],
+                ['is_table', true]
+            ])->pluck('name');
             $field_name = [];
             foreach($custom_fields as $fieldName) {
                 $field_name[] = str_replace(" ", "_", strtolower($fieldName));
             }
+
+
             return view('backend.customer.index', compact('all_permission', 'custom_fields', 'field_name'));
         }
         else
@@ -67,9 +72,9 @@ class CustomerController extends Controller
         $dir = $request->input('order.0.dir');
         //fetching custom fields data
         $custom_fields = CustomField::where([
-                        ['belongs_to', 'customer'],
-                        ['is_table', true]
-                    ])->pluck('name');
+            ['belongs_to', 'customer'],
+            ['is_table', true]
+        ])->pluck('name');
         $field_names = [];
         foreach($custom_fields as $fieldName) {
             $field_names[] = str_replace(" ", "_", strtolower($fieldName));
@@ -124,18 +129,18 @@ class CustomerController extends Controller
                 $nestedData['deposited_balance'] = number_format($customer->deposit - $customer->expense, 2);
 
                 $returned_amount = DB::table('sales')
-                                    ->join('returns', 'sales.id', '=', 'returns.sale_id')
-                                    ->where([
-                                        ['sales.customer_id', $customer->id],
-                                        ['sales.payment_status', '!=', 4]
-                                    ])
-                                    ->sum('returns.grand_total');
+                    ->join('returns', 'sales.id', '=', 'returns.sale_id')
+                    ->where([
+                        ['sales.customer_id', $customer->id],
+                        ['sales.payment_status', '!=', 4]
+                    ])
+                    ->sum('returns.grand_total');
                 $saleData = DB::table('sales')->where([
-                                ['customer_id', $customer->id],
-                                ['payment_status', '!=', 4]
-                            ])
-                            ->selectRaw('SUM(grand_total) as grand_total,SUM(paid_amount) as paid_amount')
-                            ->first();
+                    ['customer_id', $customer->id],
+                    ['payment_status', '!=', 4]
+                ])
+                    ->selectRaw('SUM(grand_total) as grand_total,SUM(paid_amount) as paid_amount')
+                    ->first();
                 $nestedData['total_due'] = number_format($saleData->grand_total - $returned_amount - $saleData->paid_amount, 2);
                 //fetching custom fields data
                 foreach($field_names as $field_name) {
@@ -203,10 +208,10 @@ class CustomerController extends Controller
     public function clearDue(Request $request)
     {
         $lims_due_sale_data = Sale::select('id', 'warehouse_id', 'grand_total', 'paid_amount', 'payment_status')
-                            ->where([
-                                ['payment_status', '!=', 4],
-                                ['customer_id', $request->customer_id]
-                            ])->get();
+            ->where([
+                ['payment_status', '!=', 4],
+                ['customer_id', $request->customer_id]
+            ])->get();
         //return $lims_due_sale_data;
         $total_paid_amount = $request->amount;
         foreach ($lims_due_sale_data as $key => $sale_data) {
@@ -214,11 +219,11 @@ class CustomerController extends Controller
                 break;
             $due_amount = $sale_data->grand_total - $sale_data->paid_amount;
             $lims_cash_register_data =  CashRegister::select('id')
-                                        ->where([
-                                            ['user_id', Auth::id()],
-                                            ['warehouse_id', $sale_data->warehouse_id],
-                                            ['status', 1]
-                                        ])->first();
+                ->where([
+                    ['user_id', Auth::id()],
+                    ['warehouse_id', $sale_data->warehouse_id],
+                    ['status', 1]
+                ])->first();
             if($lims_cash_register_data)
                 $cash_register_id = $lims_cash_register_data->id;
             else
@@ -257,7 +262,12 @@ class CustomerController extends Controller
         if($role->hasPermissionTo('customers-add')){
             $lims_customer_group_all = CustomerGroup::where('is_active',true)->get();
             $custom_fields = CustomField::where('belongs_to', 'customer')->get();
-            return view('backend.customer.create', compact('lims_customer_group_all', 'custom_fields'));
+
+            $areas = Area::where('is_active', 1)->get();
+            $groups = Group::where('is_active',1)->get();
+            $companies = Company::where('is_active',1)->get();
+
+            return view('backend.customer.create', compact('lims_customer_group_all', 'custom_fields','areas','groups','companies'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -296,14 +306,14 @@ class CustomerController extends Controller
             $this->validate($request, [
                 'name' => [
                     'max:255',
-                        Rule::unique('users')->where(function ($query) {
+                    Rule::unique('users')->where(function ($query) {
                         return $query->where('is_deleted', false);
                     }),
                 ],
                 'email' => [
                     'email',
                     'max:255',
-                        Rule::unique('users')->where(function ($query) {
+                    Rule::unique('users')->where(function ($query) {
                         return $query->where('is_deleted', false);
                     }),
                 ],
@@ -390,7 +400,7 @@ class CustomerController extends Controller
         $this->validate($request, [
             'phone_number' => [
                 'max:255',
-                    Rule::unique('customers')->ignore($id)->where(function ($query) {
+                Rule::unique('customers')->ignore($id)->where(function ($query) {
                     return $query->where('is_active', 1);
                 }),
             ],
@@ -403,14 +413,14 @@ class CustomerController extends Controller
             $this->validate($request, [
                 'name' => [
                     'max:255',
-                        Rule::unique('users')->where(function ($query) {
+                    Rule::unique('users')->where(function ($query) {
                         return $query->where('is_deleted', false);
                     }),
                 ],
                 'email' => [
                     'email',
                     'max:255',
-                        Rule::unique('users')->where(function ($query) {
+                    Rule::unique('users')->where(function ($query) {
                         return $query->where('is_deleted', false);
                     }),
                 ],
@@ -481,34 +491,34 @@ class CustomerController extends Controller
                 foreach ($columns as $key => $value) {
                     $value=preg_replace('/\D/','',$value);
                 }
-               $data= array_combine($escapedHeader, $columns);
-               $lims_customer_group_data = CustomerGroup::where('name', $data['customergroup'])->first();
-               $customer = Customer::firstOrNew(['name'=>$data['name']]);
-               $customer->customer_group_id = $lims_customer_group_data->id;
-               $customer->name = $data['name'];
-               $customer->company_name = $data['companyname'];
-               $customer->email = $data['email'];
-               $customer->phone_number = $data['phonenumber'];
-               $customer->address = $data['address'];
-               $customer->city = $data['city'];
-               $customer->state = $data['state'];
-               $customer->postal_code = $data['postalcode'];
-               $customer->country = $data['country'];
-               $customer->is_active = true;
-               $customer->save();
+                $data= array_combine($escapedHeader, $columns);
+                $lims_customer_group_data = CustomerGroup::where('name', $data['customergroup'])->first();
+                $customer = Customer::firstOrNew(['name'=>$data['name']]);
+                $customer->customer_group_id = $lims_customer_group_data->id;
+                $customer->name = $data['name'];
+                $customer->company_name = $data['companyname'];
+                $customer->email = $data['email'];
+                $customer->phone_number = $data['phonenumber'];
+                $customer->address = $data['address'];
+                $customer->city = $data['city'];
+                $customer->state = $data['state'];
+                $customer->postal_code = $data['postalcode'];
+                $customer->country = $data['country'];
+                $customer->is_active = true;
+                $customer->save();
 
-               $message = $this->mailAction($data, $mail_setting, $request, 'Customer Imported Successfully');
+                $message = $this->mailAction($data, $mail_setting, $request, 'Customer Imported Successfully');
 
-            //    $mail_setting = MailSetting::latest()->first();
-            //    if($data['email'] && $mail_setting) {
-            //         $this->setMailInfo($mail_setting);
-            //         try {
-            //             Mail::to($data['email'])->send(new CustomerCreate($data));
-            //         }
-            //         catch(\Exception $e){
-            //             $message = 'Customer imported successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
-            //         }
-            //     }
+                //    $mail_setting = MailSetting::latest()->first();
+                //    if($data['email'] && $mail_setting) {
+                //         $this->setMailInfo($mail_setting);
+                //         try {
+                //             Mail::to($data['email'])->send(new CustomerCreate($data));
+                //         }
+                //         catch(\Exception $e){
+                //             $message = 'Customer imported successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
+                //         }
+                //     }
 
             }
             $this->cacheForget('customer_list');
