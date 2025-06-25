@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
 class CompanyController extends Controller
@@ -12,8 +14,8 @@ class CompanyController extends Controller
     public function index()
     {
         $role = Role::find(Auth::user()->role_id);
-        $areas = Area::where('is_active', true)->get();
-        return view('backend.company.index', compact('areas'));
+        $companies = Company::where('is_active', true)->get();
+        return view('backend.company.index', compact('companies'));
     }
 
     /**
@@ -29,7 +31,9 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Company::create($data);
+        return redirect('companies')->with('message', 'Company created successfully');
     }
 
     /**
