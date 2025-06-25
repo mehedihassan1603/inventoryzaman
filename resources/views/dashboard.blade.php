@@ -6,6 +6,9 @@
 <h1 class="text-center">Dashboard</h1>
 change for git check
 
+
+second change for git pull
+
 <div class="container">
     <!-- Alert Section for version upgrade-->
     <div id="alertSection" class="{{ $alertVersionUpgradeEnable===true ? null : 'd-none' }} alert alert-primary alert-dismissible fade show" role="alert">
