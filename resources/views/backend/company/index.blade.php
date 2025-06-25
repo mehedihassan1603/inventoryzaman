@@ -25,32 +25,32 @@
                 </tr>
                 </thead>
                 <tbody>
-{{--                @foreach($areas as $key=>$area)--}}
-{{--                    <tr data-id="{{$area->id}}">--}}
-{{--                        <td>{{$key}}</td>--}}
-{{--                        <td>{{ $area->name }}</td>--}}
-{{--                        <td>{{ $area->is_active==1 ?'Active':'Inactive' }}</td>--}}
-{{--                        <td>--}}
-{{--                            <div class="btn-group">--}}
-{{--                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}--}}
-{{--                                    <span class="caret"></span>--}}
-{{--                                    <span class="sr-only">Toggle Dropdown</span>--}}
-{{--                                </button>--}}
-{{--                                <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">--}}
-{{--                                    <li>--}}
-{{--                                        <button type="button" data-id="{{$area->id}}" data-name="{{$area->name}}" data-is_active="{{$area->is_active}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal" ><i class="dripicons-document-edit"></i>  {{trans('file.edit')}}</button>--}}
-{{--                                    </li>--}}
-{{--                                    <li class="divider"></li>--}}
-{{--                                    {{ Form::open(['route' => ['areas.destroy', $area->id], 'method' => 'DELETE'] ) }}--}}
-{{--                                    <li>--}}
-{{--                                        <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>--}}
-{{--                                    </li>--}}
-{{--                                    {{ Form::close() }}--}}
-{{--                                </ul>--}}
-{{--                            </div>--}}
-{{--                        </td>--}}
-{{--                    </tr>--}}
-{{--                @endforeach--}}
+                @foreach($companies as $key=>$company)
+                    <tr data-id="{{$company->id}}">
+                        <td>{{$key}}</td>
+                        <td>{{ $company->name }}</td>
+                        <td>{{ $company->is_active==1 ?'Active':'Inactive' }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                    <li>
+                                        <button type="button" data-id="{{$company->id}}" data-name="{{$company->name}}" data-is_active="{{$company->is_active}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal" ><i class="dripicons-document-edit"></i>  {{trans('file.edit')}}</button>
+                                    </li>
+                                    <li class="divider"></li>
+                                    {{ Form::open(['route' => ['areas.destroy', $company->id], 'method' => 'DELETE'] ) }}
+                                    <li>
+                                        <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    </li>
+                                    {{ Form::close() }}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>
@@ -60,9 +60,9 @@
     <div id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
             <div class="modal-content">
-                {!! Form::open(['route' => 'areas.store', 'method' => 'post']) !!}
+                {!! Form::open(['route' => 'companies.store', 'method' => 'post']) !!}
                 <div class="modal-header">
-                    <h5 id="exampleModalLabel" class="modal-title">{{trans('Add Area')}}</h5>
+                    <h5 id="exampleModalLabel" class="modal-title">{{trans('Add Company')}}</h5>
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
                 </div>
                 <div class="modal-body">
@@ -74,14 +74,14 @@
                             {{Form::text('name',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Company Name'))}}
                         </div>
 
-{{--                        <div class="form-group">--}}
-{{--                            <label class="form-label">Status<span class="text-danger">*</span></label>--}}
-{{--                            <select type="text" class="form-control form-select" id="is_active" name="is_active">--}}
-{{--                                <option selected disabled value="">Select Status</option>--}}
-{{--                                <option value="1">Active</option>--}}
-{{--                                <option value="0">Inactive</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
+                        {{--                        <div class="form-group">--}}
+                        {{--                            <label class="form-label">Status<span class="text-danger">*</span></label>--}}
+                        {{--                            <select type="text" class="form-control form-select" id="is_active" name="is_active">--}}
+                        {{--                                <option selected disabled value="">Select Status</option>--}}
+                        {{--                                <option value="1">Active</option>--}}
+                        {{--                                <option value="0">Inactive</option>--}}
+                        {{--                            </select>--}}
+                        {{--                        </div>--}}
                         <div class="form-group">
                             <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                         </div>
