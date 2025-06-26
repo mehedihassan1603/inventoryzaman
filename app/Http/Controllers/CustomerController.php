@@ -49,8 +49,6 @@ class CustomerController extends Controller
             foreach($custom_fields as $fieldName) {
                 $field_name[] = str_replace(" ", "_", strtolower($fieldName));
             }
-
-
             return view('backend.customer.index', compact('all_permission', 'custom_fields', 'field_name'));
         }
         else
@@ -107,17 +105,23 @@ class CustomerController extends Controller
             {
                 $nestedData['id'] = $customer->id;
                 $nestedData['key'] = $key;
-                $nestedData['customer_group'] = $customer->customerGroup->name;
-                $nestedData['customer_details'] = $customer->name;
-                if($customer->company_name)
-                    $nestedData['customer_details'] .= '<br>'.$customer->company_name;
-                if($customer->email)
-                    $nestedData['customer_details'] .= '<br>'.$customer->email;
-                $nestedData['customer_details'] .= '<br>'.$customer->phone_number.'<br>'.$customer->address.'<br>'.$customer->city;
-                if($customer->country)
-                    $nestedData['customer_details'] .= '<br>'.$customer->country;
+                $nestedData['customer_group'] = $customer->company_name;
 
-                $nestedData['discount_plan'] = '';
+
+
+                $nestedData['customer_details'] = $customer->city;
+//                if($customer->company_name)
+//                    $nestedData['customer_details'] .= '<br>'.$customer->company_name;
+//                if($customer->email)
+//                    $nestedData['customer_details'] .= '<br>'.$customer->email;
+//                $nestedData['customer_details'] .= '<br>'.$customer->phone_number.'<br>'.$customer->address.'<br>'.$customer->city;
+//                if($customer->country)
+//                    $nestedData['customer_details'] .= '<br>'.$customer->country;
+
+
+
+
+                $nestedData['discount_plan'] =$customer->address;
                 foreach($customer->discountPlans as $index => $discount_plan) {
                     if($index)
                         $nestedData['discount_plan'] .= ', '.$discount_plan->name;
@@ -125,8 +129,9 @@ class CustomerController extends Controller
                         $nestedData['discount_plan'] .= $discount_plan->name;
                 }
 
-                $nestedData['reward_point'] = $customer->points;
-                $nestedData['deposited_balance'] = number_format($customer->deposit - $customer->expense, 2);
+                $nestedData['reward_point'] = $customer->name;
+                $nestedData['deposited_balance'] = $customer->postal_code;
+//                $nestedData['deposited_balance'] = number_format($customer->deposit - $customer->expense, 2);
 
                 $returned_amount = DB::table('sales')
                     ->join('returns', 'sales.id', '=', 'returns.sale_id')
@@ -141,7 +146,8 @@ class CustomerController extends Controller
                 ])
                     ->selectRaw('SUM(grand_total) as grand_total,SUM(paid_amount) as paid_amount')
                     ->first();
-                $nestedData['total_due'] = number_format($saleData->grand_total - $returned_amount - $saleData->paid_amount, 2);
+                $nestedData['total_due'] = $customer->phone_number
+                ;
                 //fetching custom fields data
                 foreach($field_names as $field_name) {
                     $nestedData[$field_name] = $customer->$field_name;

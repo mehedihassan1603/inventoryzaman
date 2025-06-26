@@ -24,12 +24,12 @@
             <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>{{trans('file.Customer Group')}}</th>
-                    <th>{{trans('file.Customer Details')}}</th>
-                    <th>{{trans('file.Discount Plan')}}</th>
-                    <th>{{trans('file.Reward Points')}}</th>
-                    <th>{{trans('file.Deposited Balance')}}</th>
-                    <th>{{trans('file.Total Due')}}</th>
+                    <th>{{trans('file.Company Name')}}</th>
+                    <th>{{trans('Group Name')}}</th>
+                    <th>{{trans('Area Name')}}</th>
+                    <th>{{trans('Contact Person')}}</th>
+                    <th>{{trans('file.Designation')}}</th>
+                    <th>{{trans('file.Mobile')}}</th>
                     @foreach($custom_fields as $fieldName)
                     <th>{{$fieldName}}</th>
                     @endforeach
