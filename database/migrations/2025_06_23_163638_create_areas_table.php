@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+//            $table->foreignId('group_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+//            $table->foreignId('company_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

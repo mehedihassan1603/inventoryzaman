@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Company;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,9 @@ class CompanyController extends Controller
     {
         $role = Role::find(Auth::user()->role_id);
         $companies = Company::where('is_active', true)->get();
-        return view('backend.company.index', compact('companies'));
+        $groups = Group::where('is_active',true)->get();
+        $areas = Area::where('is_active',true)->get();
+        return view('backend.company.index', compact('companies','groups','areas'));
     }
 
     /**
@@ -31,7 +34,9 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data['name'] = $request->input('name');
+        $data['group_id'] = $request->input('group_id');
+        $data['area_id'] = $request->input('area_id');
         Company::create($data);
         return redirect('companies')->with('message', 'Company created successfully');
     }

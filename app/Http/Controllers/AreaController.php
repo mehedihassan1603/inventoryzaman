@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +22,9 @@ class AreaController extends Controller
         $role = Role::find(Auth::user()->role_id);
 //        if($role->hasPermissionTo('area')) {
             $areas = Area::where('is_active', true)->get();
-            return view('backend.area.index', compact('areas'));
+            $groups = Group::where('is_active', true)->get();
+            $companies = Company::where('is_active', true)->get();
+            return view('backend.area.index', compact('areas','groups','companies'));
 //        }
 //        else
 //            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -39,17 +43,7 @@ class AreaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => [
-                'max:255',
-                Rule::unique('areas')->where(function ($query) {
-                    return $query->where('is_active', 1);
-                }),
-            ],
-        ]);
-
-        $data = $request->all();
-        $data['is_active'] = $request->is_active;
+        $data['name'] = $request->input('name');
         Area::create($data);
         return redirect('areas')->with('message', 'Area created successfully');
     }

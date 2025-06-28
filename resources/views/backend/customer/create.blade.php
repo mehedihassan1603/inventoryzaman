@@ -30,28 +30,28 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('Area Name')}} <span class="asterisk">*</span></label>
-                                        <select class="form-control form-select" id="area_name" name="address" required>
-                                            <option selected disabled value="">Select Area</option>
-                                            @foreach ($areas as $area)
-                                                <option value="{{ $area->name }}">{{ $area->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('Group Name')}} <span class="asterisk">*</span></label>
-                                        <select class="form-control form-select" id="group_name" name="city" required>
-                                            <option selected disabled value="">Select Group</option>
-                                            @foreach ($groups as $group)
-                                                <option value="{{ $group->name }}">{{ $group->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+{{--                                <div class="col-md-4">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label>{{trans('Area Name')}} <span class="asterisk">*</span></label>--}}
+{{--                                        <select class="form-control form-select" id="area_name" name="address" required>--}}
+{{--                                            <option selected disabled value="">Select Area</option>--}}
+{{--                                            @foreach ($areas as $area)--}}
+{{--                                                <option value="{{ $area->name }}">{{ $area->name }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label>{{trans('Group Name')}} <span class="asterisk">*</span></label>--}}
+{{--                                        <select class="form-control form-select" id="group_name" name="city" required>--}}
+{{--                                            <option selected disabled value="">Select Group</option>--}}
+{{--                                            @foreach ($groups as $group)--}}
+{{--                                                <option value="{{ $group->name }}">{{ $group->name }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Company Name')}} <span class="asterisk">*</span></label>
@@ -68,7 +68,6 @@
                                         @endif
                                     </div>
                                 </div>
-
 
                                 <div class="col-md-4">
                                     <div class="form-group">

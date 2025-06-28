@@ -20,8 +20,8 @@
                 <tr>
                     <th class="not-exported"></th>
                     <th>{{trans('Name')}}</th>
-                    <th>{{trans('Area Name')}}</th>
-                    <th>{{trans('Status')}}</th>
+{{--                    <th>{{trans('Area Name')}}</th>--}}
+{{--                    <th>{{trans('Status')}}</th>--}}
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
                 </thead>
@@ -30,7 +30,7 @@
                     <tr data-id="{{$group->id}}">
                         <td>{{$key}}</td>
                         <td>{{ $group->name }}</td>
-                        <td>{{ $group->area->name }}</td>
+{{--                        <td>{{ $group->area->name }}</td>--}}
                         <td>{{ $group->is_active==1 ?'Active':'Inactive' }}</td>
                         <td>
                             <div class="btn-group">
@@ -72,28 +72,28 @@
                     <form action="{{route('groups.store')}}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Name<span class="text-danger">*</span></label>
+                            <label>Group Name<span class="text-danger">*</span></label>
                             {{Form::text('name',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Group Name'))}}
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Area Name <span class="text-danger">*</span></label>
-                            <select class="form-control form-select" id="area_name" name="area_name" required>
-                                <option selected disabled value="">Select Area</option>
-                                @foreach ($areas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label class="form-label">Area Name <span class="text-danger">*</span></label>--}}
+{{--                            <select class="form-control form-select" id="area_name" name="area_name" required>--}}
+{{--                                <option selected disabled value="">Select Area</option>--}}
+{{--                                @foreach ($areas as $area)--}}
+{{--                                    <option value="{{ $area->id }}">{{ $area->name }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
 
-                        <div class="form-group">
-                            <label class="form-label">Status<span class="text-danger">*</span></label>
-                            <select type="text" class="form-control form-select" id="is_active" name="is_active">
-                                <option selected disabled value="">Select Status</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label class="form-label">Status<span class="text-danger">*</span></label>--}}
+{{--                            <select type="text" class="form-control form-select" id="is_active" name="is_active">--}}
+{{--                                <option selected disabled value="">Select Status</option>--}}
+{{--                                <option value="1">Active</option>--}}
+{{--                                <option value="0">Inactive</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
                         <div class="form-group">
                             <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                         </div>
