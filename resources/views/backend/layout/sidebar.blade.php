@@ -270,8 +270,8 @@
                 @if($holiday_active)
                 <li id="holiday-menu"><a href="{{route('holidays.index')}}">{{trans('file.Holiday')}}</a></li>
                 @endif
-                <li id="area-menu"><a href="{{route('areas.index')}}">{{trans('Area')}}</a></li>
                 <li id="group-menu"><a href="{{route('groups.index')}}">{{trans('Group')}}</a></li>
+                <li id="area-menu"><a href="{{route('areas.index')}}">{{trans('Area')}}</a></li>
                 <li id="company-menu"><a href="{{route('companies.index')}}">{{trans('Company')}}</a></li>
             </ul>
             </li>

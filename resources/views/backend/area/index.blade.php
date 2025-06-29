@@ -69,19 +69,39 @@
                     <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                     <form action="" method="POST">
                         @csrf
+{{--                        <div class="form-group">--}}
+{{--                            <label class="form-label">Group Name <span class="text-danger">*</span></label>--}}
+{{--                            <select class="form-control form-select" id="group_id" name="group_id" required>--}}
+{{--                                <option selected disabled value="">Select Group</option>--}}
+{{--                                @foreach ($groups as $group)--}}
+{{--                                    <option value="{{ $group->id }}">{{ $group->name }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+
+{{--                        <div class="form-group">--}}
+{{--                            <label class="form-label">Company Name <span class="text-danger">*</span></label>--}}
+{{--                            <select class="form-control form-select" id="company_id" name="company_id" required>--}}
+{{--                                <option selected disabled value="">Select Company</option>--}}
+{{--                                @foreach ($companies as $company)--}}
+{{--                                    <option value="{{ $company->id }}">{{ $company->name }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+
                         <div class="form-group">
-                            <label>Name<span class="text-danger">*</span></label>
+                            <label>Area Name<span class="text-danger">*</span></label>
                             {{Form::text('name',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Area Name'))}}
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Status<span class="text-danger">*</span></label>
-                            <select type="text" class="form-control form-select" id="is_active" name="is_active">
-                                <option selected disabled value="">Select Status</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label class="form-label">Status<span class="text-danger">*</span></label>--}}
+{{--                            <select type="text" class="form-control form-select" id="is_active" name="is_active">--}}
+{{--                                <option selected disabled value="">Select Status</option>--}}
+{{--                                <option value="1">Active</option>--}}
+{{--                                <option value="0">Inactive</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
                         <div class="form-group">
                             <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                         </div>

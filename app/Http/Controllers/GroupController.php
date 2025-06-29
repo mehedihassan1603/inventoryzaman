@@ -38,23 +38,11 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-//        dd('asdasd', $request->all());
-
-
-        $data = $request->all();
-        //print_r($data);
-        $result = Group::create($data);
-        //print_r($result);exit;
+        $data['name'] = $request->input('name');
+        $data['area_name'] = $request->input('area_name')??null;
+        Group::create($data);
         return redirect('groups')->with('message', 'Group created successfully');
 
-//        $validated = $request->validate([
-//            'name' => 'required|string',
-//            'area_name' => 'required|string',
-//            'is_active' => 'nullable'
-//        ]);
-//
-//        Group::create($validated);
-//        return redirect('groups')->with('message', 'Group created successfully');
     }
 
     /**

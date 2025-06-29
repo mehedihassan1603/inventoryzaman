@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('group_id');
+            $table->integer('area_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

@@ -19,7 +19,9 @@
                 <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>{{trans('Name')}}</th>
+                    <th>{{trans('Company Name')}}</th>
+                    <th>{{trans('Group Name')}}</th>
+                    <th>{{trans('Area Name')}}</th>
                     <th>{{trans('Status')}}</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
@@ -27,8 +29,10 @@
                 <tbody>
                 @foreach($companies as $key=>$company)
                     <tr data-id="{{$company->id}}">
-                        <td>{{$key}}</td>
+                        <td>{{ $key }}</td>
                         <td>{{ $company->name }}</td>
+                        <td>{{ $company->group->name }}</td>
+                        <td>{{ $company->area->name }}</td>
                         <td>{{ $company->is_active==1 ?'Active':'Inactive' }}</td>
                         <td>
                             <div class="btn-group">
@@ -69,10 +73,34 @@
                     <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                     <form action="" method="POST">
                         @csrf
+
                         <div class="form-group">
-                            <label>Name<span class="text-danger">*</span></label>
+                            <label>Company Name<span class="text-danger">*</span></label>
                             {{Form::text('name',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Company Name'))}}
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Group Name <span class="text-danger">*</span></label>
+                            <select class="form-control form-select" id="group_id" name="group_id" required>
+                                <option selected disabled value="">Select Group</option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Area Name <span class="text-danger">*</span></label>
+                            <select class="form-control form-select" id="area_id" name="area_id" required>
+                                <option selected disabled value="">Select Area</option>
+                                @foreach ($areas as $area)
+                                    <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+
 
                         {{--                        <div class="form-group">--}}
                         {{--                            <label class="form-label">Status<span class="text-danger">*</span></label>--}}

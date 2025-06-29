@@ -26,4 +26,9 @@ class Customer extends Model
     {
         return $this->belongsToMany('App\Models\DiscountPlan', 'discount_plan_customers');
     }
+
+    public function company(){
+        return $this->belongsTo(Company::class);
+    }
+
 }
