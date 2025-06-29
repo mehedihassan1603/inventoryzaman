@@ -940,7 +940,7 @@ class QuotationController extends Controller
         // dd($product_quotation);
         return $product_quotation;
     }
-    
+
 
     public function edit($id)
     {
