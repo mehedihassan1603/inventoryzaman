@@ -194,26 +194,28 @@
             }
         });
         $('#company_name').on('change', function() {
-    var company = $(this).val();
-    if(company) {
-        $.ajax({
-            url: '{{ route("getContactPerson") }}',
-            type: 'GET',
-            data: { company_name: company },
-            success: function(data) {
-                let $personSelect = $('#contact_person');
-                $personSelect.empty().append('<option value="">Select Contact Person</option>');
+            var company = $(this).val();
 
-                $.each(data, function(index, person) {
-                    let displayText = `${person.name} (${person.phone_number})`;
-                    $personSelect.append(`<option value="${person.id}" data-name="${person.name}">${displayText}</option>`);
+            if(company) {
+
+                $.ajax({
+                    url: '{{ route("getContactPerson") }}',
+                    type: 'GET',
+                    data: { company_name: company },
+                    success: function(data) {
+                        let $personSelect = $('#contact_person');
+                        $personSelect.empty().append('<option value="">Select Contact Person</option>');
+
+                        $.each(data, function(index, person) {
+                            let displayText = `${person.name} (${person.phone_number})`;
+                            $personSelect.append(`<option value="${person.id}" data-name="${person.name}">${displayText}</option>`);
+                        });
+                    }
                 });
+            } else {
+                $('#contact_person').empty().append('<option value="">Select Contact Person</option>');
             }
         });
-    } else {
-        $('#contact_person').empty().append('<option value="">Select Contact Person</option>');
-    }
-});
 
 // Set contact person name into hidden field when selected
 $('#contact_person').on('change', function () {

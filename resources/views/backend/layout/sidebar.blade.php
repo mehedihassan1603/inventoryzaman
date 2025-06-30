@@ -712,6 +712,8 @@
                     @if($role->id <= 2)
                     <li id="languages"><a href="{{url('languages/')}}"> {{trans('file.Languages')}}</a></li>
                     @endif
+                    <li id="terms"><a href="{{url('terms/')}}"> {{trans('Terms and Conditions')}}</a></li>
                 </ul>
+
             </li>
         </ul>
