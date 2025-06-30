@@ -157,6 +157,11 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         Route::get('/delete', [LanguageSettingController::class, 'languageDelete'])->name('language.delete');
     });
 
+    Route::get('/terms', [\App\Http\Controllers\TermSettingController::class, 'index'])->name('language.delete');
+
+
+    Route::resource('terms',\App\Http\Controllers\TermSettingController::class);
+
     Route::controller(HomeController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/dashboard', 'dashboard');
