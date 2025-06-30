@@ -22,7 +22,7 @@
                                             <input type="text" name="created_at" class="form-control date" placeholder="Choose date"/>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 d-none">
                                         <div class="form-group">
                                             <label>
                                                 {{trans('file.Reference No')}}
@@ -50,7 +50,7 @@
                                             <label>{{trans('file.Supplier')}}</label>
                                             <select name="supplier_id" class="selectpicker form-control" data-live-search="true" title="Select supplier...">
                                                 @foreach($lims_supplier_list as $supplier)
-                                                <option value="{{$supplier->id}}">{{$supplier->name .' ('. $supplier->company_name .')'}}</option>
+                                                <option value="{{$supplier->id}}">{{$supplier->company_name .' ('. $supplier->name .')'}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -240,7 +240,7 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 d-none">
                                         <div class="form-group">
                                             <label>{{trans('file.Order Tax')}}</label>
                                             <select class="form-control" name="order_tax_rate">
@@ -262,7 +262,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>
-                                                <strong>{{trans('file.Shipping Cost')}}</strong>
+                                                <strong>{{trans('Transportation Cost')}}</strong>
                                             </label>
                                             <input type="number" name="shipping_cost" class="form-control" step="any" />
                                         </div>

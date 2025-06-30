@@ -90,8 +90,9 @@
 		                                            <tr>
 		                                                <th>{{trans('file.name')}}</th>
                                                         <th>{{trans('file.Code')}}</th>
-                                                        <th>{{trans('file.Batch No')}}</th>
+                                                        {{-- <th>{{trans('file.Batch No')}}</th> --}}
                                                         <th>{{trans('file.Quantity')}}</th>
+                                                        <th>{{trans('Unit')}}</th>
                                                         <th>{{trans('file.Net Unit Price')}}</th>
                                                         <th>{{trans('file.Discount')}}</th>
                                                         <th>{{trans('file.Tax')}}</th>
@@ -169,7 +170,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>{{trans('Transportation')}}</label>
+                                            <label>{{trans('Transportation Cost')}}</label>
                                             <input type="number" name="shipping_cost" class="form-control" step="any">
                                         </div>
                                     </div>
@@ -598,6 +599,7 @@ function productSearch(data){
                 data: data
             },
             success: function(data) {
+                console.log('data get', data);
                 var flag = 1;
                 if (pre_qty > 0) {
                     var qty = data[15];
@@ -620,16 +622,22 @@ function productSearch(data){
                     temp_unit_name = (data[6]).split(',');
                     cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
                     cols += '<td>' + data[1] + '</td>';
-                    if(data[12])
-                        cols += '<td><input type="text" class="form-control batch-no" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
-                    else
-                        cols += '<td><input type="text" class="form-control batch-no" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
+
                     cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
+                    cols += '<td>' + data[6] + '</td>';
                     cols += '<td class="net_unit_price"></td>';
                     cols += '<td class="discount">{{number_format(0, $general_setting->decimal, '.', '')}}</td>';
                     cols += '<td class="tax"></td>';
                     cols += '<td class="sub-total"></td>';
                     cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
+
+
+                    if(data[12])
+                        cols += '<td><input type="text" class="form-control batch-no d-none" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
+                    else
+                        cols += '<td><input type="text" class="form-control batch-no d-none" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
+
+
                     cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
                     cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
                     cols += '<input type="hidden" class="sale-unit" name="sale_unit[]" value="' + temp_unit_name[0] + '"/>';

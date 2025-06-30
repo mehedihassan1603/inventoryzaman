@@ -49,8 +49,9 @@
                     <td><img src="{{url('images/product/zummXD2dvAtI.png')}}" height="80" width="80"></td>
                     @endif
                     <td>
+                        <span style="font-weight: bold;">{{$supplier->company_name}}</span><br>
+                        <br>
                         {{$supplier->name}}
-                        <br>{{$supplier->company_name}}
                         @if($supplier->vat_number)
                         <br>{{$supplier->vat_number}}
                         @endif
