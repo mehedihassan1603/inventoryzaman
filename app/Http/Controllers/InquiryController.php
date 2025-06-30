@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -419,17 +420,17 @@ public function getData(Request $request)
     public function create()
     {
         $products = Product::where('is_active', 1)->get();
-    $customers = Customer::all();
+        $customers = Customer::all();
 
-    // $areas = $customers->pluck('address')->unique()->filter()->values();
-    $areas = $customers->pluck('address')->unique()->filter()->values();
-    $groupNamesByArea = [];
+        // $areas = $customers->pluck('address')->unique()->filter()->values();
+        $areas = $customers->pluck('address')->unique()->filter()->values();
+        $groupNamesByArea = [];
 
-    foreach ($areas as $area) {
-        $groupNamesByArea[$area] = Customer::where('address', $area)
-                                           ->pluck('city')
-                                           ->unique()
-                                           ->values();
+        foreach ($areas as $area) {
+            $groupNamesByArea[$area] = Customer::where('address', $area)
+                                               ->pluck('city')
+                                               ->unique()
+                                               ->values();
     }
 // dd($areas);
         $role = Role::find(Auth::user()->role_id);
@@ -439,8 +440,10 @@ public function getData(Request $request)
             $lims_customer_list = Customer::where('is_active', true)->get();
             $lims_supplier_list = Supplier::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
+            $companies = Company::where('is_active', true)->get();
 
-            return view('backend.inquiry.create', compact('customers', 'areas', 'groupNamesByArea', 'products','lims_biller_list', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list'));
+
+            return view('backend.inquiry.create', compact('customers', 'areas', 'groupNamesByArea', 'products','lims_biller_list', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list','companies'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

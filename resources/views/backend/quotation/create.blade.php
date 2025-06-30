@@ -41,7 +41,6 @@
 
                                 </div>
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group d-none">
                                             <label>{{ trans('file.Supplier') }}</label>
@@ -62,15 +61,15 @@
                                             </select>
                                         </div>
 
-                                        {{--                                     <input type="hidden" name="biller_id" value="{{ auth()->user()->id }}">--}}
-                                        {{--<div class="form-group">--}}
-                                        {{--                                            <label>{{trans('file.Biller')}} *</label>--}}
-                                        {{--                                            <select required name="biller_id" class="selectpicker form-control" data-live-search="true" id="biller-id" title="Select Biller...">--}}
-                                        {{--                                                @foreach($lims_biller_list as $biller)--}}
-                                        {{--                                                <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>--}}
-                                        {{--                                                @endforeach--}}
-                                        {{--                                            </select>--}}
-                                        {{--                                        </div>--}}
+{{--                                     <input type="hidden" name="biller_id" value="{{ auth()->user()->id }}">--}}
+{{--                                      <div class="form-group">--}}
+{{--                                            <label>{{trans('file.Biller')}} *</label>--}}
+{{--                                            <select required name="biller_id" class="selectpicker form-control" data-live-search="true" id="biller-id" title="Select Biller...">--}}
+{{--                                                @foreach($lims_biller_list as $biller)--}}
+{{--                                                <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>--}}
+{{--                                                @endforeach--}}
+{{--                                            </select>--}}
+{{--                                        </div>--}}
                                     </div>
 
                                     <div class="col-md-12 mt-2">

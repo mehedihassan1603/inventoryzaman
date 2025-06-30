@@ -15,8 +15,8 @@
 <section>
     <div class="container">
         @if(in_array("customers-add", $all_permission))
-            <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
-            <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a>
+            <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('Add Customer')}}</a>&nbsp;
+            <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('Import Customer')}}</a>
         @endif
     </div>
     <div class="table-responsive">
@@ -24,12 +24,13 @@
             <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>{{trans('file.Company Name')}}</th>
+                    <th>{{trans('Company Name')}}</th>
                     <th>{{trans('Group Name')}}</th>
                     <th>{{trans('Area Name')}}</th>
                     <th>{{trans('Contact Person')}}</th>
-                    <th>{{trans('file.Designation')}}</th>
-                    <th>{{trans('file.Mobile')}}</th>
+                    <th>{{trans('Designation')}}</th>
+{{--                    <th>{{trans('file.Department')}}</th>--}}
+                    <th>{{trans('Mobile')}}</th>
                     @foreach($custom_fields as $fieldName)
                     <th>{{$fieldName}}</th>
                     @endforeach
