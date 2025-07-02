@@ -397,7 +397,8 @@ public function getData(Request $request)
         $data[] = [
             'key' => $start + $index + 1,
             'date' => Carbon::parse($inquiry->created_at)->format('Y-m-d'),
-            'company_name' => $inquiry->company_name,
+            'company_name' => $inquiry->company->name ?? "Null",
+//            'company_name' => $inquiry->company_name,
             'contact_person' => $inquiry->contact_person,
             'contact_number' => $inquiry->contact_number,
             'email' => $inquiry->email,
@@ -619,9 +620,7 @@ public function getContactPerson(Request $request)
     //     return redirect()->back()->with('success', 'Inquiry submitted successfully.');
     // }
 
-    public function store(Request $request)
-{
-    // dd($request->all());
+    public function store(Request $request){
     $request->validate([
         'date' => 'required|date',
         'company_name' => 'required|string',

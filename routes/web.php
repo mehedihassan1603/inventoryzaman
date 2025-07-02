@@ -420,6 +420,7 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         });
      });
     Route::resource('quotations', QuotationController::class);
+    Route::get('/get-contact-person', [QuotationController::class, 'getContactPerson'])->name('getContactPerson');
 
 
     Route::controller(InquiryController::class)->group(function () {

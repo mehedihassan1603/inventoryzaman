@@ -1,4 +1,6 @@
-@extends('backend.layout.main') @section('content')
+@extends('backend.layout.main')
+
+@section('content')
 @if(session()->has('not_permitted'))
   <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
 @endif
@@ -16,28 +18,36 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>{{trans('file.customer')}} *</label>
-                                            <select id="customer_id" name="customer_id" required class="selectpicker form-control" data-live-search="true" id="customer-id" title="Select customer...">
-                                                @foreach($lims_customer_list as $customer)
-                                                    <option value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('Company Name')}} *</label>
+                                        <select id="company_name" name="company_name" required class="form-control" title="Select Company...">
+                                            @foreach($companies as $company)
+                                                <option value="{{$company->id}}">{{$company->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+                                </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Warehouse')}} *</label>
-                                            <select id="warehouse_id" name="warehouse_id" required class="selectpicker form-control" data-live-search="true" title="Select warehouse...">
-                                                @foreach($lims_warehouse_list as $warehouse)
-                                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                <!-- Contact Person Dropdown -->
+                                <div class="col-md-4">
+                                    <label>Contact Person <span class="text-danger">*</span></label>
+                                    <select name="customer_id" id="contact_person" class="form-control" required>
+                                        <option value="">Select Contact Person</option>
+                                    </select>
+                                    <input type="hidden" name="contact_person" id="contact_person_name">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Warehouse')}} *</label>
+                                        <select id="warehouse_id" name="warehouse_id" required class="selectpicker form-control" data-live-search="true" title="Select warehouse...">
+                                            @foreach($lims_warehouse_list as $warehouse)
+                                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
-
+                                </div>
 
                                 </div>
                                 <div class="row">
@@ -60,16 +70,6 @@
                                                 <option value="{{ auth()->user()->id }}" selected>{{ auth()->user()->name }}</option>
                                             </select>
                                         </div>
-
-{{--                                     <input type="hidden" name="biller_id" value="{{ auth()->user()->id }}">--}}
-{{--                                      <div class="form-group">--}}
-{{--                                            <label>{{trans('file.Biller')}} *</label>--}}
-{{--                                            <select required name="biller_id" class="selectpicker form-control" data-live-search="true" id="biller-id" title="Select Biller...">--}}
-{{--                                                @foreach($lims_biller_list as $biller)--}}
-{{--                                                <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>--}}
-{{--                                                @endforeach--}}
-{{--                                            </select>--}}
-{{--                                        </div>--}}
                                     </div>
 
                                     <div class="col-md-12 mt-2">
@@ -183,18 +183,6 @@
                                 			</select>
                                 		</div>
                                 	</div>
-                                	<div class="col-md-4">
-                                		<div class="form-group">
-                                			<label>{{trans('file.Attach Document')}}</label>
-                                			<i class="dripicons-question" data-toggle="tooltip" title="Only jpg, jpeg, png, gif, pdf, csv, docx, xlsx and txt file is supported"></i>
-                                            <input type="file" name="document" class="form-control" />
-                                            @if($errors->has('extension'))
-                                                <span>
-                                                   <strong>{{ $errors->first('extension') }}</strong>
-                                                </span>
-                                            @endif
-                                		</div>
-                                	</div>
                                 </div>
                                 <div class="row">
                                 	<div class="col-md-12">
@@ -204,8 +192,21 @@
                                 		</div>
                                 	</div>
                                 </div>
+                                {{--checkbox start--}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label><strong>Terms and Conditions</strong></label><br>
+                                            @foreach($terms as $term)
+                                                <input type="checkbox" id="term_{{ $term->id }}" name="terms[]" value="{{ $term->id }}" class="ml-3">
+                                                <label for="term_{{ $term->id }}" class="">{{ $term->name }}</label><br>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
-                                    <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-button">
+                                    <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary mt-4" id="submit-button">
                                 </div>
                             </div>
                         </div>
@@ -405,6 +406,62 @@ var without_stock = <?php echo json_encode($general_setting->without_stock) ?>;
             productSearch(data);
 	    }
 	});
+
+    {{--$(document).ready(function () {--}}
+    {{--    $('#company_name').on('change', function () {--}}
+    {{--        var company_name = $(this).val();--}}
+
+    {{--        if (company_name) {--}}
+    {{--            $.ajax({--}}
+    {{--                url: '{{ route("getContactPerson") }}',--}}
+    {{--                type: 'GET',--}}
+    {{--                data: { company_name: company_name },--}}
+    {{--                success: function (data) {--}}
+    {{--                    let $personSelect = $('#contact_person');--}}
+    {{--                    $personSelect.empty().append('<option value="">Select Contact Person</option>');--}}
+
+    {{--                    $.each(data, function (index, person) {--}}
+    {{--                        let displayText = `${person.name} (${person.phone_number})`;--}}
+    {{--                        $personSelect.append(`<option value="${person.id}" data-name="${person.name}">${displayText}</option>`);--}}
+    {{--                    });--}}
+    {{--                }--}}
+    {{--            });--}}
+    {{--        } else {--}}
+    {{--            $('#contact_person').empty().append('<option value="">Select Contact Person</option>');--}}
+    {{--        }--}}
+    {{--    });--}}
+
+    {{--    $('#contact_person').on('change', function () {--}}
+    {{--        var selectedName = $(this).find(':selected').data('name');--}}
+    {{--        $('#contact_person_name').val(selectedName);--}}
+    {{--    });--}}
+
+    {{--});--}}
+
+
+    // company and customer ajax start
+    {{--$('#company_name').on('change', function() {--}}
+    {{--    var company_name = $(this).val();--}}
+    {{--    if(company_name) {--}}
+    {{--        $.ajax({--}}
+    {{--            url: '{{ route("getContactPerson") }}',--}}
+    {{--            type: 'GET',--}}
+    {{--            data: { company_name: company_name },--}}
+    {{--            success: function(data) {--}}
+    {{--                let $personSelect = $('#contact_person');--}}
+    {{--                $personSelect.empty().append('<option value="">Select Contact Person</option>');--}}
+
+    {{--                $.each(data, function(index, person) {--}}
+    {{--                    let displayText = `${person.name} (${person.phone_number})`;--}}
+    {{--                    $personSelect.append(`<option value="${person.id}" data-name="${person.name}">${displayText}</option>`);--}}
+    {{--                });--}}
+    {{--            }--}}
+    {{--        });--}}
+    {{--    } else {--}}
+    {{--        $('#contact_person').empty().append('<option value="">Select Contact Person</option>');--}}
+    {{--    }--}}
+    {{--});--}}
+
 
 	//Change quantity
 	$("#myTable").on('input', '.qty', function() {
@@ -915,6 +972,38 @@ function calculateGrandTotal() {
     $('#grand_total').text(grand_total.toFixed({{$general_setting->decimal}}));
     $('input[name="grand_total"]').val(grand_total.toFixed({{$general_setting->decimal}}));
 }
+    $(document).ready(function () {
+
+        // company and customer ajax start
+        $('#company_name').on('change', function () {
+            var company_name = $(this).val();
+            if (company_name) {
+                $.ajax({
+                    url: '{{ route("getContactPerson") }}',
+                    type: 'GET',
+                    data: {company_name: company_name},
+                    success: function (data) {
+                        console.log('dataaaaaaaaa', data);
+                        let $personSelect = $('#contact_person');
+                        $personSelect.empty().append('<option value="">Select Contact Person</option>');
+
+                        $.each(data, function (index, person) {
+                            let displayText = person.name + ' (' + person.phone_number + ')';
+                            let optionHtml = '<option value="' + person.id + '" data-name="' + person.name + '">' + displayText + '</option>';
+                            $personSelect.append(optionHtml);
+                        });
+
+                    }
+                });
+            } else {
+                $('#contact_person').empty().append('<option value="">Select Contact Person</option>');
+            }
+        });
+
+    });
+
+
 
 </script>
+
 @endpush

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Terms;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -357,6 +359,19 @@ class QuotationController extends Controller
         echo json_encode($json_data);
     }
 
+    public function getContactPerson(Request $request)
+    {
+        $contactPersons = Customer::where('company_name', $request->company_name)
+            ->select('id', 'name', 'phone_number')
+            ->get()
+            ->unique('id') // Optional, if duplicates exist
+            ->values();
+
+        print_r($contactPersons);exit;
+
+        return response()->json($contactPersons);
+    }
+
     public function create()
     {
         $role = Role::find(Auth::user()->role_id);
@@ -366,8 +381,10 @@ class QuotationController extends Controller
             $lims_customer_list = Customer::where('is_active', true)->get();
             $lims_supplier_list = Supplier::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
+            $companies = Company::where('is_active', true)->get();
+            $terms = Terms::get();
 
-            return view('backend.quotation.create', compact('lims_biller_list', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list'));
+            return view('backend.quotation.create', compact('lims_biller_list', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list','companies','terms'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -375,11 +392,23 @@ class QuotationController extends Controller
 
     public function store(Request $request)
     {
+//        $request->validate([
+//            'terms' => 'nullable|array',
+//            'terms.*' => 'exists:terms,id',
+//        ]);
+//
+//        if ($request->has('terms')) {
+//            $lims_quotation_data->terms()->sync($request->terms);
+//        }
+
+
         // dd($request->all());
         $data = $request->except('document');
         //return dd($data);
         $data['user_id'] = Auth::id();
         $document = $request->document;
+
+
         if($document){
             $v = Validator::make(
                 [
@@ -404,7 +433,12 @@ class QuotationController extends Controller
             $data['document'] = $documentName;
         }
         $data['reference_no'] = 'qr-' . date("Ymd") . '-'. date("his");
+
+
+
+
         $lims_quotation_data = Quotation::create($data);
+
         if($lims_quotation_data->quotation_status == 2){
             //collecting mail data
             $lims_customer_data = Customer::find($data['customer_id']);
