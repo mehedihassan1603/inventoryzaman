@@ -11,6 +11,7 @@ use App\Models\Biller;
 use App\Models\Product;
 use App\Models\Unit;
 use App\Models\Tax;
+use App\Models\Company;
 use App\Models\Quotation;
 use App\Models\Delivery;
 use App\Models\PosSetting;
@@ -366,8 +367,10 @@ class QuotationController extends Controller
             $lims_customer_list = Customer::where('is_active', true)->get();
             $lims_supplier_list = Supplier::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
+            $companies = Company::where('is_active', true)->get();
+            // dd($companies);
 
-            return view('backend.quotation.create', compact('lims_biller_list', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list'));
+            return view('backend.quotation.create', compact('lims_biller_list', 'companies', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

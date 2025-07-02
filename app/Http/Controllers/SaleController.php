@@ -41,6 +41,7 @@ use App\Models\RewardPointSetting;
 use App\Models\CustomField;
 use App\Models\Table;
 use App\Models\Courier;
+use App\Models\Company;
 use App\Models\ExternalService;
 use DB;
 use Cache;
@@ -542,12 +543,26 @@ class SaleController extends Controller
             $numberOfInvoice = Sale::count();
             $custom_fields = CustomField::where('belongs_to', 'sale')->get();
             $lims_customer_group_all = CustomerGroup::where('is_active', true)->get();
+            $companies = Company::where('is_active', true)->get();
 
-            return view('backend.sale.create',compact('currency_list', 'lims_agent_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all'));
+            return view('backend.sale.create',compact('currency_list', 'companies', 'lims_agent_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
+
+    public function getByCompany($companyId)
+{
+    // Optional: Validate if the company exists
+    $company = Company::findOrFail($companyId);
+
+    // Fetch customers under this company (assuming you have a company_id column in customers table)
+    $customers = Customer::where('company_name', $companyId)->get(['id', 'name', 'phone_number']);
+
+    return response()->json($customers);
+}
+
+
 
     public function store(Request $request)
     {
@@ -2995,6 +3010,7 @@ class SaleController extends Controller
     {
         $lims_sale_data = Sale::find($id);
 
+
         $lims_product_sale_data = Product_Sale::where('sale_id', $id)->get();
         if(cache()->has('biller_list'))
         {
@@ -3018,6 +3034,9 @@ class SaleController extends Controller
         else{
             $lims_customer_data = Customer::find($lims_sale_data->customer_id);
         }
+// dd($lims_customer_data);
+        $lims_company_data = Company::findOrFail($lims_customer_data->company_name);
+        // dd($lims_company_data);
 
         $lims_payment_data = Payment::where('sale_id', $id)->get();
         if(cache()->has('pos_setting'))
@@ -3138,16 +3157,16 @@ class SaleController extends Controller
         // return [$lims_sale_data, $currency_code, $lims_product_sale_data, $lims_biller_data, $lims_warehouse_data, $lims_customer_data, $lims_payment_data, $numberInWords, $paid_by_info, $sale_custom_fields, $customer_custom_fields, $product_custom_fields, $qrText, $totalDue];
 
         if($lims_pos_setting_data->invoice_option == 'A4') {
-            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'lims_company_data','currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
         elseif($lims_sale_data->sale_type == 'online'){
-            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'lims_company_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
         elseif($lims_pos_setting_data->invoice_option == 'thermal' && $lims_pos_setting_data->thermal_invoice_size == '58'){
-            return view('backend.sale.invoice58', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.invoice58', compact('lims_sale_data', 'lims_company_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
         else{
-            return view('backend.sale.invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.invoice', compact('lims_sale_data', 'lims_company_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
     }
 

@@ -75,14 +75,14 @@
             <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.Sale')}}</span></a>
             <ul id="sale" class="collapse list-unstyled ">
                 @if($sale_index_permission_active)
-                <li id="sale-list-menu"><a href="{{route('sales.index')}}">{{trans('file.Sale List')}}</a></li>
+                <li id="sale-list-menu"><a href="{{route('sales.index')}}">{{trans('Sale Order List')}}</a></li>
                 @endif
                 @if($sale_add_permission_active)
-                <li><a href="{{route('sale.pos')}}">POS</a></li>
-                <li id="sale-create-menu"><a href="{{route('sales.create')}}">{{trans('file.Add Sale')}}</a></li>
-                <li id="sale-import-menu"><a href="{{url('sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li>
+                {{-- <li><a href="{{route('sale.pos')}}">POS</a></li> --}}
+                <li id="sale-create-menu"><a href="{{route('sales.create')}}">{{trans('Sale Order')}}</a></li>
+                {{-- <li id="sale-import-menu"><a href="{{url('sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li> --}}
                 @endif
-                @if($packing_slip_challan_active)
+                {{-- @if($packing_slip_challan_active)
                 <li id="packing-list-menu"><a href="{{route('packingSlip.index')}}">{{trans('file.Packing Slip List')}}</a></li>
                 <li id="challan-list-menu"><a href="{{route('challan.index')}}">{{trans('file.Challan List')}}</a></li>
                 @endif
@@ -95,7 +95,7 @@
                 @if($coupon_permission_active)
                 <li id="coupon-menu"><a href="{{route('coupons.index')}}">{{trans('file.Coupon List')}}</a> </li>
                 @endif
-                <li id="courier-menu"><a href="{{route('couriers.index')}}">{{trans('file.Courier List')}}</a> </li>
+                <li id="courier-menu"><a href="{{route('couriers.index')}}">{{trans('file.Courier List')}}</a> </li> --}}
             </ul>
             </li>
             @endif
@@ -302,12 +302,12 @@
                 @endif
 
                 @if($customer_index_permission_active)
-                <li id="customer-list-menu"><a href="{{route('customer.index')}}">{{trans('file.Customer List')}}</a></li>
+                <li id="customer-list-menu"><a href="{{route('customer.index')}}">{{trans('Customer List')}}</a></li>
                 <?php
                     $customer_add_permission_active = $role_has_permissions_list->where('name', 'customers-add')->first();
                 ?>
                 @if($customer_add_permission_active)
-                <li id="customer-create-menu"><a href="{{route('customer.create')}}">{{trans('file.Add Customer')}}</a></li>
+                <li id="customer-create-menu"><a href="{{route('customer.create')}}">{{trans('Add Customer')}}</a></li>
                 @endif
                 @endif
 
@@ -712,6 +712,8 @@
                     @if($role->id <= 2)
                     <li id="languages"><a href="{{url('languages/')}}"> {{trans('file.Languages')}}</a></li>
                     @endif
+                    <li id="terms"><a href="{{url('terms/')}}"> {{trans('Terms and Conditions')}}</a></li>
                 </ul>
+
             </li>
         </ul>

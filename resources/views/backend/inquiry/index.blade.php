@@ -23,7 +23,7 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-header mt-2">
-        <h3 class="text-center">{{ trans('file.Inquiry List') }}</h3>
+        <h3 class="text-center">{{ trans('Inquiry List') }}</h3>
       </div>
     </div>
 

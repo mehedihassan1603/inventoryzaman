@@ -157,6 +157,11 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         Route::get('/delete', [LanguageSettingController::class, 'languageDelete'])->name('language.delete');
     });
 
+    Route::get('/terms', [\App\Http\Controllers\TermSettingController::class, 'index'])->name('language.delete');
+
+
+    Route::resource('terms',\App\Http\Controllers\TermSettingController::class);
+
     Route::controller(HomeController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/dashboard', 'dashboard');
@@ -358,6 +363,8 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         Route::get('sales/get-sold-items/{id}', 'getSoldItem');
         Route::post('sales/sendsms', 'sendSMS')->name('sale.sendsms');
         Route::post('sales/whatsapp-notification', 'whatsappNotificationSend')->name('sale.wappnotification');
+        Route::get('/get-customers-by-company/{companyId}',  'getByCompany')->name('get-customers-by-company');
+
     });
     Route::resource('sales', SaleController::class);
 

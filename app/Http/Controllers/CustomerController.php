@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Company;
+use App\Models\Department;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use App\Models\CustomerGroup;
@@ -49,6 +50,7 @@ class CustomerController extends Controller
             foreach($custom_fields as $fieldName) {
                 $field_name[] = str_replace(" ", "_", strtolower($fieldName));
             }
+
             return view('backend.customer.index', compact('all_permission', 'custom_fields', 'field_name'));
         }
         else
@@ -57,7 +59,7 @@ class CustomerController extends Controller
 
     public function customerData(Request $request)
     {
-        $q = Customer::where('is_active', true);
+        $q = Customer::where('is_active', true)->with('company');
         $totalData = $q->count();
         $totalFiltered = $totalData;
 
@@ -105,11 +107,11 @@ class CustomerController extends Controller
             {
                 $nestedData['id'] = $customer->id;
                 $nestedData['key'] = $key;
-                $nestedData['customer_group'] = $customer->company_name;
+                $nestedData['customer_group'] = $customer->company ? $customer->company->name : 'N/A';
 
 
 
-                $nestedData['customer_details'] = $customer->city;
+                $nestedData['customer_details'] = $customer->company->group->name ?? 'null';
 //                if($customer->company_name)
 //                    $nestedData['customer_details'] .= '<br>'.$customer->company_name;
 //                if($customer->email)
@@ -118,10 +120,7 @@ class CustomerController extends Controller
 //                if($customer->country)
 //                    $nestedData['customer_details'] .= '<br>'.$customer->country;
 
-
-
-
-                $nestedData['discount_plan'] =$customer->address;
+                $nestedData['discount_plan'] =$customer->company->area->name??'null';
                 foreach($customer->discountPlans as $index => $discount_plan) {
                     if($index)
                         $nestedData['discount_plan'] .= ', '.$discount_plan->name;
@@ -272,8 +271,9 @@ class CustomerController extends Controller
             $areas = Area::where('is_active', 1)->get();
             $groups = Group::where('is_active',1)->get();
             $companies = Company::where('is_active',1)->get();
+            $departments = Department::where('is_active',1)->get();
 
-            return view('backend.customer.create', compact('lims_customer_group_all', 'custom_fields','areas','groups','companies'));
+            return view('backend.customer.create', compact('lims_customer_group_all', 'custom_fields','areas','groups','companies','departments'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

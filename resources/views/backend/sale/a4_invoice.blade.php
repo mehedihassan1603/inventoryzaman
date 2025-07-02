@@ -70,10 +70,17 @@
                 </td>
                 <td style="padding:5px -19px;width:30%;text-align:right;">
                     <div style="display: flex;justify-content: space-between;border-bottom:1px solid #aaa">
-                        <span>Invoice No:</span> <span>{{$lims_sale_data->reference_no}}</span>
+                        <span>Date:</span> <span>{{$lims_sale_data->created_at}}</span>
                     </div>
                     <div style="display: flex;justify-content: space-between;border-bottom:1px solid #aaa">
-                        <span>Date:</span> <span>{{$lims_sale_data->created_at}}</span>
+                        <span>Invoice No:</span> <span>{{$lims_sale_data->reference_no}}</span>
+                    </div>
+
+                    <div style="display: flex;justify-content: space-between;border-bottom:1px solid #aaa">
+                        <span>W/O:</span> <span>{{$lims_sale_data->work_order}}</span>
+                    </div>
+                    <div style="display: flex;justify-content: space-between;border-bottom:1px solid #aaa">
+                        <span>W/O Date:</span> <span>{{$lims_sale_data->work_order_date}}</span>
                     </div>
                     @if($paid_by_info)
                         <div style="display: flex;justify-content: space-between;border-bottom:1px solid #aaa">
@@ -86,23 +93,27 @@
         <table style="width: 100%;border-collapse: collapse; margin-top: 4px;">
             <tr>
                 <td colspan="3" style="padding:4px 0;width:30%;vertical-align:top">
-                    <h2 style="background-color: rgb(1, 75, 148); color: white; padding:3px 10px; margin-bottom:0">Bill To</h2>
+                    <h2 style="background-color: rgb(1, 75, 148); color: white; padding:3px 10px; margin-bottom:0">Sales Order To</h2>
                     <div style="margin-top: 10px;margin-left: 10px">
-                        <span>{{$lims_customer_data->name}}</span>
-                    </div>
-                    <div style="margin-left: 10px">
-                        <span>VAT Number:</span>&nbsp;&nbsp;<span>{{$lims_customer_data->tax_no}}</span>
+                        {{-- <span>{{$lims_customer_data->name}}</span> --}}
+                        Company: <span>{{$lims_company_data->name}}</span>
                     </div>
                     <div style="margin-left: 10px">
 
                         <span>Address:</span>&nbsp;&nbsp;
-                        @if($lims_sale_data->sale_type == 'online')
-                        <span>{{$lims_sale_data->shipping_name}}, {{$lims_sale_data->shipping_address}}, {{$lims_sale_data->shipping_city}}, {{$lims_sale_data->shipping_country}}, {{$lims_sale_data->shipping_zip}}</span>
-                        @else
-                        <span>{{$lims_customer_data->address}}</span>
-                        @endif
+                        {{$lims_customer_data->country}}<br>
+                        {{-- @if($lims_sale_data->sale_type == 'online') --}}
+                        {{-- <span>{{$lims_sale_data->shipping_name}},
+                            {{$lims_sale_data->shipping_address}},
+                            {{$lims_sale_data->shipping_city}},
+                            {{$lims_sale_data->shipping_country}},
+                            {{$lims_sale_data->shipping_zip}}
+                        </span> --}}
+                        {{-- @else --}}
+                        {{-- Phone: <span>{{$lims_customer_data->phone_number}}</span> --}}
+                        {{-- @endif --}}
                     </div>
-                    @if(isset($lims_customer_data->phone_number) || isset($lims_sale_data->shipping_phone))
+                    {{-- @if(isset($lims_customer_data->phone_number) || isset($lims_sale_data->shipping_phone))
                     <div style="margin-bottom: 10px;margin-left: 10px">
                         <span>Phone:</span>&nbsp;&nbsp;
                         @if($lims_sale_data->sale_type == 'online')
@@ -111,10 +122,23 @@
                         <span>{{$lims_customer_data->phone_number}}</span>
                         @endif
                     </div>
-                    @endif
+                    @endif --}}
                 </td>
-                <td colspan="4" style="width:60%">
+                <td colspan="4" style="width:20%">
 
+                </td>
+                <td colspan="4" style="width:40%">
+                    <h2 style="background-color: rgb(1, 75, 148); color: white; padding:3px 10px; margin-bottom:0">Ship To</h2>
+                    <div style="margin-top: 10px;margin-left: 10px">
+                        Name: <span>{{$lims_customer_data->name}}</span>
+                    </div>
+                    <div style="margin-left: 10px">
+
+                        <span>Address:</span>&nbsp;&nbsp;
+                        {{$lims_customer_data->country}}<br>
+
+                        Phone: <span>{{$lims_customer_data->phone_number}}</span>
+                    </div>
                 </td>
             </tr>
         </table>
@@ -132,7 +156,7 @@
                 $total_product_tax = 0;
                 $totalPrice = 0;
             ?>
-            
+
             @foreach($lims_product_sale_data as $key => $product_sale_data)
             <?php
                 $lims_product_data = \App\Models\Product::find($product_sale_data->product_id);
@@ -154,7 +178,7 @@
                 $topping_names = [];
                 $topping_prices = [];
                 $topping_price_sum = 0;
-        
+
                 if ($product_sale_data->topping_id) {
                     $decoded_topping_id = json_decode(json_decode($product_sale_data->topping_id), true);
                     //dd(json_decode($product_sale_data->topping_id));
@@ -166,7 +190,7 @@
                         }
                     }
                 }
-        
+
                 $net_price_with_toppings = $product_sale_data->net_unit_price + $topping_price_sum;
                 $total = ($product_sale_data->net_unit_price + $topping_price_sum) * $product_sale_data->qty;
 
@@ -176,7 +200,7 @@
                 <td style="@if( Config::get('app.locale') == 'ar' || $general_setting->is_rtl){{'border-right:1px solid #222;'}}@endif border:1px solid #222;padding:1px 3px;text-align: center;">{{$key+1}}</td>
                 <td style="border:1px solid #222;padding:1px 3px;font-size: 15px;line-height: 1.2;">
 
-                    <span style="font-weight: bold;">Product Name</span>: 
+                    <span style="font-weight: bold;">Product Name</span>:
 
                     {!!$lims_product_data->name!!}
 
@@ -198,23 +222,23 @@
                             @endif
                         @endif
                     @endforeach
-                    @if($product_sale_data->imei_number && !str_contains($product_sale_data->imei_number, "null") )
+                    {{-- @if($product_sale_data->imei_number && !str_contains($product_sale_data->imei_number, "null") )
                     <br>IMEI or Serial: {{$product_sale_data->imei_number}}
-                    @endif
+                    @endif --}}
                     <!-- warranty -->
-                     @if (isset($product_sale_data->warranty_duration))
+                     {{-- @if (isset($product_sale_data->warranty_duration))
                             <br>
                             <span style="font-weight: bold;">Warranty</span>{{ ': ' . $product_sale_data->warranty_duration }}
                             <br>
                             <span style="font-weight: bold;">Will Expire</span>{{ ': ' . $product_sale_data->warranty_end }}
-                     @endif
+                     @endif --}}
                      <!-- guarantee -->
-                     @if (isset($product_sale_data->guarantee_duration))
+                     {{-- @if (isset($product_sale_data->guarantee_duration))
                             <br>
                             <span style="font-weight: bold;">Guarantee</span>{{ ': ' . $product_sale_data->guarantee_duration }}
                             <br>
                             <span style="font-weight: bold;">Will Expire</span>{{ ': ' . $product_sale_data->guarantee_end }}
-                     @endif
+                     @endif --}}
                 </td>
                 <td style="border:1px solid #222;padding:1px 3px;text-align:center">{{$product_sale_data->qty.' '.$unit_code.' '.$variant_name}}</td>
                 <td style="border:1px solid #222;padding:1px 3px;text-align:center">{{number_format($product_sale_data->net_unit_price, $general_setting->decimal, '.', ',')}}
@@ -228,7 +252,7 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="3" rowspan="@if($general_setting->invoice_format == 'gst' && $general_setting->state == 2) 5 @else 4 @endif" style="border:1px solid #222;padding:1px 3px;text-align: center; vertical-align: top;">
+                <td colspan="3" rowspan="@if($general_setting->invoice_format == 'gst' && $general_setting->state == 2) 6 @else 5 @endif" style="border:1px solid #222;padding:1px 3px;text-align: center; vertical-align: top;">
                     {{trans('file.Note')}}<br>{{$lims_sale_data->sale_note}}
                 </td>
                 <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;background-color:rgb(205, 218, 235);">
@@ -276,12 +300,21 @@
             @endif
             <tr>
                 <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;background-color:rgb(205, 218, 235);">
+                    {{trans('Transportation Cost')}}
+                </td>
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px;background-color:rgb(205, 218, 235);text-align: center;font-size: 15px;">
+                    {{number_format((float)($lims_sale_data->shipping_cost) ,$general_setting->decimal, '.', ',')}}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;background-color:rgb(205, 218, 235);">
                     {{trans('file.Discount')}}
                 </td>
                 <td class="td-text" style="border:1px solid #222;padding:1px 3px;background-color:rgb(205, 218, 235);text-align: center;font-size: 15px;">
                     {{number_format((float)($lims_sale_data->total_discount+$lims_sale_data->order_discount) ,$general_setting->decimal, '.', ',')}}
                 </td>
             </tr>
+
             <tr>
                 <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;background-color:rgb(205, 218, 235);">{{trans('file.grand total')}}</td>
                 <td class="td-text" style="border:1px solid #222;padding:1px 3px;background-color:rgb(205, 218, 235);text-align: center;font-size: 15px;">{{number_format((float)$lims_sale_data->grand_total ,$general_setting->decimal, '.', ',')}}</td>

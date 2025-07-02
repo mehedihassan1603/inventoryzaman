@@ -22,4 +22,11 @@ class Inquiry extends Model
         'reffer',
         'remark',
     ];
+    // app/Models/Inquiry.php
+
+public function company()
+{
+    return $this->belongsTo(Company::class, 'company_name'); // or use 'App\Models\Company' if needed
+}
+
 }

@@ -8,7 +8,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h4>{{trans('file.Add Customer')}}</h4>
+                            <h4>{{trans('Add Customer')}}</h4>
                         </div>
                         <div class="card-body">
                             <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
@@ -58,7 +58,7 @@
                                         <select class="form-control form-select" id="company_name" name="company_name" required>
                                             <option selected disabled value="">Select Company</option>
                                             @foreach ($companies as $company)
-                                                <option value="{{ $company->name }}">{{ $company->name }}</option>
+                                                <option value="{{ $company->id }}">{{ $company->name }}</option>
                                             @endforeach
                                         </select>
                                         @if($errors->has('company_name'))
@@ -75,6 +75,36 @@
                                         <input type="text" id="name" name="customer_name" required class="form-control">
                                     </div>
                                 </div>
+
+
+                                <div class="col-md-4">
+{{--                                    <div class="form-group">--}}
+{{--                                        <label>{{trans('Department')}}</label>--}}
+{{--                                        <input type="text" name="department" class="form-control">--}}
+{{--                                    </div>--}}
+
+
+                                    <div class="form-group">
+                                        <label>{{trans('Department')}} <span class="asterisk">*</span></label>
+                                        <select class="form-control form-select" id="department_id" name="department_id" required>
+                                            <option selected disabled value="">Select Department</option>
+                                            @foreach ($departments as $department)
+                                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('department_name'))
+                                           <span>
+                                                <strong>{{ $errors->first('department_name') }}</strong>
+                                           </span>
+                                        @endif
+                                    </div>
+
+
+
+
+                                </div>
+
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('Designation')}}</label>
