@@ -146,7 +146,7 @@
                 $("#editModal input[name='name']").val($(this).data('name'));
                 // $("#editModal input[name='is_active']").val($(this).data('is_active'));
                 let isActive = $(this).data('is_active');
-                $("#editModal select[name='is_active']").val(String(isActive))
+                $("#editModal select[name='is_active']").val(String(isActive));
 
                 //$("#editModal select[name='is_active']").val($(this).data('is_active'));
             });
