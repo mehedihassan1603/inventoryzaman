@@ -270,9 +270,9 @@
                 @if($holiday_active)
                 <li id="holiday-menu"><a href="{{route('holidays.index')}}">{{trans('file.Holiday')}}</a></li>
                 @endif
-                <li id="group-menu"><a href="{{route('groups.index')}}">{{trans('Group')}}</a></li>
-                <li id="area-menu"><a href="{{route('areas.index')}}">{{trans('Area')}}</a></li>
-                <li id="company-menu"><a href="{{route('companies.index')}}">{{trans('Company')}}</a></li>
+                <li id="group-menu"><a href="{{route('groups.index')}}">{{trans('Group List')}}</a></li>
+                <li id="area-menu"><a href="{{route('areas.index')}}">{{trans('Area List')}}</a></li>
+                <li id="company-menu"><a href="{{route('companies.index')}}">{{trans('Company List')}}</a></li>
             </ul>
             </li>
             @endif
@@ -302,12 +302,12 @@
                 @endif
 
                 @if($customer_index_permission_active)
-                <li id="customer-list-menu"><a href="{{route('customer.index')}}">{{trans('Customer List')}}</a></li>
+                <li id="customer-list-menu"><a href="{{route('customer.index')}}">{{trans('Company')}}</a></li>
                 <?php
                     $customer_add_permission_active = $role_has_permissions_list->where('name', 'customers-add')->first();
                 ?>
                 @if($customer_add_permission_active)
-                <li id="customer-create-menu"><a href="{{route('customer.create')}}">{{trans('Add Customer')}}</a></li>
+                <li id="customer-create-menu"><a href="{{route('customer.create')}}">{{trans('Add Company')}}</a></li>
                 @endif
                 @endif
 

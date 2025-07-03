@@ -20,7 +20,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>{{trans('file.Create Quotation')}}</h4>
+                        <h4>{{trans('Create Quotation')}}</h4>
                     </div>
                     <div class="card-body">
                         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
@@ -28,7 +28,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 d-none">
                                         <div class="form-group">
                                             <label>
                                                 {{trans('file.Reference No')}}
@@ -36,18 +36,34 @@
                                             <input type="text" name="reference_no" class="form-control" />
                                         </div>
                                     </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>{{ trans('Company') }} *</label>
+                                            <input type="hidden" name="company_id_hidden" value="{{ $lims_quotation_data->company_name }}" />
+                                            <select required name="company_name" class="selectpicker form-control" id="company_id" title="Select Company..." disabled>
+                                                <option value="{{ $lims_quotation_data->company_name }}" selected>
+                                                    {{ $lims_quotation_data->company->name ?? $lims_quotation_data->company_name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.customer')}} *</label>
                                             <input type="hidden" name="customer_id_hidden" value="{{ $lims_quotation_data->customer_id }}" />
                                             <select required name="customer_id" class="selectpicker form-control" data-live-search="true" id="customer_id" title="Select customer...">
                                                 @foreach($lims_customer_list as $customer)
-                                                <?php $deposit[$customer->id] = $customer->deposit - $customer->expense; ?>
-                                                <option value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
+                                                    <?php $deposit[$customer->id] = $customer->deposit-$customer->expense; ?>
+                                                    <option value="{{$customer->id}}" {{ $lims_quotation_data->customer_id == $customer->company_name ? 'selected' : '' }}>
+                                                        {{$customer->name . ' (' . $customer->phone_number . ')'}}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.Warehouse')}} *</label>
@@ -70,23 +86,35 @@
                                         </div>
                                     </div> --}}
                                     <div class="col-md-4">
-    <div class="form-group">
-        <label>{{ trans('file.Biller') }} *</label>
-        <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
-        <input type="hidden" name="biller_id" value="{{ Auth::id() }}">
-    </div>
-</div>
-
-                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>{{trans('file.Supplier')}}</label>
-                                            <select name="supplier_id" class="selectpicker form-control" data-live-search="true" id="supplier-id" title="Select Supplier...">
-                                                @foreach($lims_supplier_list as $supplier)
-                                                <option value="{{$supplier->id}}">{{$supplier->name . ' (' . $supplier->company_name . ')'}}</option>
-                                                @endforeach
-                                            </select>
+                                            <label>{{ trans('file.Biller') }} *</label>
+                                            <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
+                                            <input type="hidden" name="biller_id" value="{{ Auth::id() }}">
                                         </div>
                                     </div>
+
+                                    <div class="form-group d-none">
+                                        <label>{{ trans('file.Supplier') }}</label>
+                                        <select name="supplier_id" class="selectpicker form-control" data-live-search="true" id="supplier-id" title="Select Supplier...">
+                                            @foreach($lims_supplier_list as $key => $supplier)
+                                                <option value="{{ $supplier->id }}" {{ $key == 0 ? 'selected' : '' }}>
+                                                    {{ $supplier->name . ' (' . $supplier->company_name . ')' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
+                                    {{--<div class="col-md-4">--}}
+{{--                                        <div class="form-group">--}}
+{{--                                            <label>{{trans('file.Supplier')}}</label>--}}
+{{--                                            <select name="supplier_id" class="selectpicker form-control" data-live-search="true" id="supplier-id" title="Select Supplier...">--}}
+{{--                                                @foreach($lims_supplier_list as $supplier)--}}
+{{--                                                <option value="{{$supplier->id}}">{{$supplier->name . ' (' . $supplier->company_name . ')'}}</option>--}}
+{{--                                                @endforeach--}}
+{{--                                            </select>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 mt-3">
@@ -197,12 +225,12 @@
                                                         <input type="hidden" class="sale-unit-operation-value" value="{{$unit_operation_value}}"/>
                                                         <input type="hidden" class="discount-value" name="discount[]" value="{{ $product_quotation->discount ?? 0 }}" />
 
-<input type="hidden" class="tax-rate" name="tax_rate[]" value="{{ $product_quotation->tax_rate ?? 0 }}" />
+                                                        <input type="hidden" class="tax-rate" name="tax_rate[]" value="{{ $product_quotation->tax_rate ?? 0 }}" />
 
-<input type="hidden" class="tax-name" value="{{ $tax->name ?? 'No Tax' }}" />
-<input type="hidden" class="tax-method" value="{{ $product_data->tax_method ?? 0 }}" />
+                                                        <input type="hidden" class="tax-name" value="{{ $tax->name ?? 'No Tax' }}" />
+                                                        <input type="hidden" class="tax-method" value="{{ $product_data->tax_method ?? 0 }}" />
 
-<input type="hidden" class="tax-value" name="tax[]" value="{{ number_format((float)($product_quotation->tax ?? 0), $general_setting->decimal, '.', '') }}" />
+                                                        <input type="hidden" class="tax-value" name="tax[]" value="{{ number_format((float)($product_quotation->tax ?? 0), $general_setting->decimal, '.', '') }}" />
 
                                                         <input type="hidden" class="imei-number" name="imei_number[]" />
                                                         <input type="hidden" class="subtotal-value" name="subtotal[]" value="{{$product_quotation->total}}" />
@@ -268,7 +296,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label><strong>Terms and Conditions</strong></label><br>
+                                            @foreach($terms as $term)
+                                                <input type="checkbox" id="term_{{ $term->id }}" name="terms[]" value="{{ $term->id }}" class="ml-3">
+                                                <label for="term_{{ $term->id }}" class="">{{ $term->name }}</label><br>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-4">
                                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-button">
                                 </div>
                             </div>

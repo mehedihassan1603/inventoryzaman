@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Terms;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -1278,26 +1279,21 @@ public function getContactPerson(Request $request)
 
     public function createQuotation($id)
     {
-        $lims_customer_list = Customer::where('is_active', true)->get();
+
         $lims_warehouse_list = Warehouse::where('is_active', true)->get();
         $lims_biller_list = Biller::where('is_active', true)->get();
 
         $lims_supplier_list = Supplier::where('is_active', true)->get();
         $lims_tax_list = Tax::where('is_active', true)->get();
         $lims_quotation_data = Inquiry::find($id);
+        $lims_customer_list = Customer::where('is_active', true)->where('company_name',$lims_quotation_data->company_name )->get();
         $requirementString = $lims_quotation_data->requirement;
-
-        // 3. Extract product codes using regex
         preg_match_all('/\((.*?)\)/', $requirementString, $matches);
         $productCodes = $matches[1]; // This gives you: ['87351162', '69674153', '02202177']
-
-        // 4. Fetch products by code
         $products = Product::whereIn('code', $productCodes)->get();
-
-        // 5. Output as array
-        // dd($products);
+        $terms = Terms::all();
         $lims_pos_setting_data = PosSetting::latest()->first();
-        return view('backend.inquiry.create_quotation',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_supplier_list', 'lims_tax_list', 'lims_quotation_data','products', 'lims_pos_setting_data'));
+        return view('backend.inquiry.create_quotation',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_supplier_list', 'lims_tax_list', 'lims_quotation_data','products', 'lims_pos_setting_data','terms'));
     }
 
     public function createPurchase($id)
