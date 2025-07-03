@@ -392,22 +392,10 @@ class QuotationController extends Controller
 
     public function store(Request $request)
     {
-//        $request->validate([
-//            'terms' => 'nullable|array',
-//            'terms.*' => 'exists:terms,id',
-//        ]);
-//
-//        if ($request->has('terms')) {
-//            $lims_quotation_data->terms()->sync($request->terms);
-//        }
-
-
-        // dd($request->all());
-        $data = $request->except('document');
-        //return dd($data);
         $data['user_id'] = Auth::id();
-        $document = $request->document;
 
+        $data = $request->except('document');
+        $document = $request->document;
 
         if($document){
             $v = Validator::make(
@@ -433,8 +421,6 @@ class QuotationController extends Controller
             $data['document'] = $documentName;
         }
         $data['reference_no'] = 'qr-' . date("Ymd") . '-'. date("his");
-
-
 
 
         $lims_quotation_data = Quotation::create($data);
@@ -568,7 +554,6 @@ class QuotationController extends Controller
                 $message = 'Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-
         return redirect()->back()->with('message', $message);
     }
 

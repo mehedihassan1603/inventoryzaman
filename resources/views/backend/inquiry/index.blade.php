@@ -26,6 +26,7 @@
         <h3 class="text-center">{{ trans('Inquiry List') }}</h3>
       </div>
     </div>
+      <a href="">Add Inquiry</a>
 
     <div class="table-responsive">
       <table id="inquiries-table" class="table inquiries-list" style="width: 100%">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Terms;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -1296,8 +1297,13 @@ public function getContactPerson(Request $request)
 
         // 5. Output as array
         // dd($products);
+
+        $terms = Terms::all();
+
+
+
         $lims_pos_setting_data = PosSetting::latest()->first();
-        return view('backend.inquiry.create_quotation',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_supplier_list', 'lims_tax_list', 'lims_quotation_data','products', 'lims_pos_setting_data'));
+        return view('backend.inquiry.create_quotation',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_supplier_list', 'lims_tax_list', 'lims_quotation_data','products', 'lims_pos_setting_data','terms'));
     }
 
     public function createPurchase($id)
