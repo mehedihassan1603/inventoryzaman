@@ -393,7 +393,6 @@ class QuotationController extends Controller
     public function store(Request $request)
     {
         $data['user_id'] = Auth::id();
-
         $data = $request->except('document');
         $document = $request->document;
 
