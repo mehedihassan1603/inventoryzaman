@@ -9,5 +9,20 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'is_active'];
+    protected $fillable = ['name','group_id','area_id'];
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+
+    }
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
+
+    }
+
+
+
+
 }

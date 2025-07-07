@@ -9,7 +9,17 @@ class Area extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'is_active'];
+    protected $fillable = ['name'];
+
+
+    public function group(){
+
+        return $this->belongsTo(Group::class);
+    }
+
+    public function company(){
+        return $this->belongsTo(Company::class);
+    }
 
 
 }

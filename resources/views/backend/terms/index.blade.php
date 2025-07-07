@@ -12,24 +12,24 @@
 
     <section>
         <div class="container-fluid">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('Add Group')}}</button>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('Add Terms and Conditions')}}</button>
         </div>
         <div class="table-responsive">
             <table id="department-table" class="table">
                 <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>{{trans('Name')}}</th>
+                    <th>{{trans('Terms and Condition')}}</th>
                     <th>{{trans('Status')}}</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($groups as $key=>$group)
-                    <tr data-id="{{$group->id}}">
+                @foreach($terms as $key=>$term)
+                    <tr data-id="{{$term->id}}">
                         <td>{{$key}}</td>
-                        <td>{{ $group->name }}</td>
-                        <td>{{ $group->is_active==1 ?'Active':'Inactive' }}</td>
+                        <td>{{ $term->name }}</td>
+                        <td>{{ $term->active==1 ?'Active':'Inactive' }}</td>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
@@ -38,10 +38,10 @@
                                 </button>
                                 <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                     <li>
-                                        <button type="button" data-id="{{$group->id}}" data-name="{{$group->name}}" data-is_active="{{$group->is_active}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal" ><i class="dripicons-document-edit"></i>  {{trans('file.edit')}}</button>
+                                        <button type="button" data-id="{{$term->id}}" data-name="{{$term->name}}" data-is_active="{{$term->active}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal" ><i class="dripicons-document-edit"></i>  {{trans('file.edit')}}</button>
                                     </li>
                                     <li class="divider"></li>
-                                    {{ Form::open(['route' => ['groups.destroy', $group->id], 'method' => 'DELETE'] ) }}
+                                    {{ Form::open(['route' => ['terms.destroy', $term->id], 'method' => 'DELETE'] ) }}
                                     <li>
                                         <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                     </li>
@@ -60,9 +60,9 @@
     <div id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
             <div class="modal-content">
-                {!! Form::open(['route' => 'groups.store', 'method' => 'post']) !!}
+                {!! Form::open(['route' => 'terms.store', 'method' => 'post']) !!}
                 <div class="modal-header">
-                    <h5 id="exampleModalLabel" class="modal-title">{{trans('Add Group')}}</h5>
+                    <h5 id="exampleModalLabel" class="modal-title">{{trans('Add Terms and Conditions')}}</h5>
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
                 </div>
                 <div class="modal-body">
@@ -70,8 +70,8 @@
                     <form action="{{route('groups.store')}}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Group Name<span class="text-danger">*</span></label>
-                            {{Form::text('name',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Group Name'))}}
+                            <label>Terms and Conditions<span class="text-danger">*</span></label>
+                            {{Form::text('name',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Enter Terms and Conditions'))}}
                         </div>
                         <div class="form-group">
                             <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
@@ -86,15 +86,15 @@
     <div id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
             <div class="modal-content">
-                {{ Form::open(['route' => ['areas.update', 1], 'method' => 'PUT'] ) }}
+                {{ Form::open(['route' => ['terms.update', 1], 'method' => 'PUT'] ) }}
                 <div class="modal-header">
-                    <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Update Area')}}</h5>
+                    <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Update Terms and Conditions')}}</h5>
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
                 </div>
                 <div class="modal-body">
                     <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                     <div class="form-group">
-                        <label>{{trans('file.name')}} *</label>
+                        <label>{{trans('Terms and Conditions ')}} *</label>
                         {{Form::text('name',null, array('required' => 'required', 'class' => 'form-control'))}}
                     </div>
 
@@ -106,7 +106,7 @@
                             <option value="0">Inactive</option>
                         </select>
                     </div>
-                    <input type="hidden" name="area_id">
+                    <input type="hidden" name="term_id">
                     <div class="form-group">
                         <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                     </div>
@@ -142,14 +142,10 @@
         }
         $(document).ready(function() {
             $('.edit-btn').on('click', function(){
-                $("#editModal input[name='area_id']").val($(this).data('id'));
+                $("#editModal input[name='term_id']").val($(this).data('id'));
                 $("#editModal input[name='name']").val($(this).data('name'));
                 // $("#editModal input[name='is_active']").val($(this).data('is_active'));
-                let isActive = $(this).data('is_active'); // Expected to be 0 or 1
-
-
-
-
+                let isActive = $(this).data('is_active');
                 $("#editModal select[name='is_active']").val(String(isActive))
 
                 //$("#editModal select[name='is_active']").val($(this).data('is_active'));

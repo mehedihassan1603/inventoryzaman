@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     protected $fillable =[
-        "customer_group_id", "user_id", "name", "company_name",
+        "customer_group_id", "user_id", "name", "company_name","department_id",
         "email", "phone_number", "tax_no", "address", "city",
         "state", "postal_code", "country", "points", "deposit", "expense", "wishlist", "is_active"
     ];
@@ -26,4 +26,9 @@ class Customer extends Model
     {
         return $this->belongsToMany('App\Models\DiscountPlan', 'discount_plan_customers');
     }
+
+    public function company(){
+        return $this->belongsTo(Company::class, 'company_name');
+    }
+
 }

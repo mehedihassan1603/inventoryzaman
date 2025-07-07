@@ -13,10 +13,10 @@
 @endif
 
 <section>
-    <div class="container-fluid">
+    <div class="container">
         @if(in_array("customers-add", $all_permission))
-            <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
-            <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a>
+            <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('Add Customer')}}</a>&nbsp;
+            <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('Import Customer')}}</a>
         @endif
     </div>
     <div class="table-responsive">
@@ -24,12 +24,13 @@
             <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>{{trans('file.Customer Group')}}</th>
-                    <th>{{trans('file.Customer Details')}}</th>
-                    <th>{{trans('file.Discount Plan')}}</th>
-                    <th>{{trans('file.Reward Points')}}</th>
-                    <th>{{trans('file.Deposited Balance')}}</th>
-                    <th>{{trans('file.Total Due')}}</th>
+                    <th>{{trans('Company Name')}}</th>
+                    <th>{{trans('Group Name')}}</th>
+                    <th>{{trans('Area Name')}}</th>
+                    <th>{{trans('Contact Person')}}</th>
+                    <th>{{trans('Designation')}}</th>
+{{--                    <th>{{trans('file.Department')}}</th>--}}
+                    <th>{{trans('Mobile')}}</th>
                     @foreach($custom_fields as $fieldName)
                     <th>{{$fieldName}}</th>
                     @endforeach

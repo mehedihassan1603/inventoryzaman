@@ -457,11 +457,36 @@
         $('.buttons-delete').addClass('d-none');
 
     function quotationDetails(quotation){
+        console.log('quotation',quotation);
         $('input[name="quotation_id"]').val(quotation[13]);
-        var htmltext = '<strong>{{trans("file.Date")}}: </strong>'+quotation[0]+'<br><strong>{{trans("file.reference")}}: </strong>'+quotation[1]+'<br><strong>{{trans("file.Status")}}: </strong>'+quotation[2]+'<br>';
+        var htmltext = '<strong>{{trans("file.Date")}}: </strong>'+quotation[0]+'<br><strong>{{trans("file.reference")}}: </strong>'+quotation[1];
         if(quotation[25])
             htmltext += '<strong>{{trans("file.Attach Document")}}: </strong><a href="documents/quotation/'+quotation[25]+'">Download</a><br>';
-        htmltext += '<br><div class="row"><div class="col-md-6"><strong>{{trans("file.From")}}:</strong><br>'+quotation[3]+'<br>'+quotation[4]+'<br>'+quotation[5]+'<br>'+quotation[6]+'<br>'+quotation[7]+'<br>'+quotation[8]+'</div><div class="col-md-6"><div class="float-right"><strong>{{trans("file.To")}}:</strong><br>'+quotation[9]+'<br>'+quotation[10]+'<br>'+quotation[11]+'<br>'+quotation[12]+'</div></div></div>';
+        // htmltext += '<br><div class="row"><div class="col-md-6"><strong>{{trans("file.From")}}:</strong><br>'+quotation[3]+'<br>'+quotation[4]+'<br>'+quotation[5]+'<br>'+quotation[6]+'<br>'+quotation[7]+'<br>'+quotation[8]+'</div><div class="col-md-6"><div class="float-right"><strong>{{trans("file.To")}}:</strong><br>'+quotation[9]+'<br>'+quotation[10]+'<br>'+quotation[11]+'<br>'+quotation[12]+'</div></div></div>';
+        htmltext += `
+<table style="width: 100%;border: 0px solid black!important; margin-top: 0px !important; margin-bottom: 0px !important;">
+    <tr>
+        <td style="border: 0px solid black!important; padding: 0px !important;">
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                     <strong>{{ trans("From") }}:</strong> <br>
+                     ${quotation[3]}<br>
+   ${quotation[4]}<br>
+   ${quotation[7]}<br>
+                  ${quotation[8]}
+                </div>
+                <div >
+                    <strong>{{ trans("To") }}:</strong> <br>
+                      ${quotation[9]}<br>
+                     ${quotation[10]}<br>
+                    ${quotation[11]}<br>
+                    ${quotation[12]}
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+`;
         $.get('quotations/product_quotation/' + quotation[13], function(data){
             $(".product-quotation-list tbody").remove();
             var name_code = data[0];

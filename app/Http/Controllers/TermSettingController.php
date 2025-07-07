@@ -2,23 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area;
-use App\Models\Company;
 use App\Models\Group;
+use App\Models\Terms;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
 
-class CompanyController extends Controller
+class TermSettingController extends Controller
 {
     public function index()
     {
-        $role = Role::find(Auth::user()->role_id);
-        $companies = Company::where('is_active', true)->get();
-        $groups = Group::where('is_active',true)->get();
-        $areas = Area::where('is_active',true)->get();
-        return view('backend.company.index', compact('companies','groups','areas'));
+        $terms = Terms::all();
+        return view('backend.terms.index',compact('terms'));
     }
 
     /**
@@ -35,10 +28,8 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $data['name'] = $request->input('name');
-        $data['group_id'] = $request->input('group_id');
-        $data['area_id'] = $request->input('area_id');
-        Company::create($data);
-        return redirect('companies')->with('message', 'Company created successfully');
+        Terms::create($data);
+        return redirect('terms')->with('message', 'Terms and Conditions created successfully');
     }
 
     /**

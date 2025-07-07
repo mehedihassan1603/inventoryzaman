@@ -47,10 +47,10 @@
                                         </span>
                                         @endif
                                     </div>
-                                    <div class="col-md-4">
+                                    {{-- <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.customer')}} *</label>
-                                            <div class="input-group pos">
+                                            <div class="input-group pos">--}}
                                                 <?php
                                                   $deposit = [];
                                                   $points = [];
@@ -60,7 +60,7 @@
                                                     ['permissions.name', 'customers-add'],
                                                     ['role_id', \Auth::user()->role_id] ])->first();
                                                 ?>
-                                                @if($customer_active)
+                                                {{--@if($customer_active)
                                                 <select required name="customer_id" id="customer_id" class="selectpicker form-control" data-live-search="true" title="Select customer..." style="width: 100px">
                                                 @foreach($lims_customer_list as $customer)
                                                     @php
@@ -86,7 +86,29 @@
                                                 @endif
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
+
+                                    <div class="col-md-4">
+    <div class="form-group">
+        <label>Company *</label>
+        <select name="company_id" id="company_id" class="form-control selectpicker" data-live-search="true" title="Select Company">
+            @foreach($companies as $company)
+                <option value="{{ $company->id }}">{{ $company->name }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="form-group">
+        <label>Customer *</label>
+        <select name="customer_id" id="customer_id" class="form-control selectpicker" data-live-search="true" title="Select customer" disabled>
+            {{-- Will be filled by JS --}}
+        </select>
+
+    </div>
+</div>
+
                                     @if(isset(auth()->user()->warehouse_id))
                                     <input type="hidden" name="warehouse_id" id="warehouse_id" value="{{auth()->user()->warehouse_id}}" />
                                     @else
@@ -104,14 +126,17 @@
                                     @if(isset(auth()->user()->biller_id))
                                     <input type="hidden" name="biller_id" id="biller_id" value="{{auth()->user()->biller_id}}" />
                                     @else
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 d-none">
                                         <div class="form-group">
                                             <label>{{trans('file.Biller')}} *</label>
-                                            <select required id="biller_id" name="biller_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Biller...">
-                                                @foreach($lims_biller_list as $biller)
-                                                <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>
-                                                @endforeach
-                                            </select>
+                                            <select required id="biller_id" name="biller_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins">
+    @foreach($lims_biller_list as $biller)
+        <option value="{{ $biller->id }}" {{ $loop->first ? 'selected' : '' }}>
+            {{ $biller->name . ' (' . $biller->company_name . ')' }}
+        </option>
+    @endforeach
+</select>
+
                                         </div>
                                     </div>
                                     @endif
@@ -126,6 +151,26 @@
                                         </div>
                                     </div> --}}
                                     <div class="col-md-4">
+    <div class="form-group">
+        <label>{{ trans('Work Order') }}</label>
+        <input type="text" name="work_order" class="form-control" value="{{ old('work_order') }}" />
+        @if($errors->has('work_order'))
+            <span><strong>{{ $errors->first('work_order') }}</strong></span>
+        @endif
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="form-group">
+        <label>{{ trans('Work Order Date') }}</label>
+        <input type="date" name="work_order_date" class="form-control" value="{{ old('work_order_date') }}" />
+        @if($errors->has('work_order_date'))
+            <span><strong>{{ $errors->first('work_order_date') }}</strong></span>
+        @endif
+    </div>
+</div>
+
+                                    <div class="col-md-4 d-none">
                                         <div class="form-group">
                                             <label>{{trans('file.Agent')}}</label>
                                             <select id="agent_id" name="agent_id" class="selectpicker form-control" data-live-search="true" title="Select agent...">
@@ -136,7 +181,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 d-none">
                                         <div class="form-group">
                                             <label>{{trans('file.Currency')}} *</label>
                                             <select name="currency_id" id="currency" class="form-control selectpicker" data-toggle="tooltip" title="" data-original-title="Sale currency">
@@ -146,7 +191,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 d-none">
                                         <div class="form-group mb-0">
                                             <label>{{trans('file.Exchange Rate')}} *</label>
                                         </div>
@@ -177,8 +222,9 @@
                                                         <th>{{trans('file.name')}}</th>
                                                         <th>{{trans('file.Code')}}</th>
                                                         <th>{{trans('file.Quantity')}}</th>
-                                                        <th>{{trans('file.Batch No')}}</th>
-                                                        <th>{{trans('file.Expired Date')}}</th>
+                                                        {{-- <th>{{trans('file.Batch No')}}</th> --}}
+                                                        {{-- <th>{{trans('file.Expired Date')}}</th> --}}
+                                                        <th>{{trans('Unit')}}</th>
                                                         <th>{{trans('file.Net Unit Price')}}</th>
                                                         <th>{{trans('file.Discount')}}</th>
                                                         <th>{{trans('file.Tax')}}</th>
@@ -240,7 +286,7 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 d-none">
                                         <div class="form-group">
                                             <label>{{trans('file.Order Tax')}}</label>
                                             <select class="form-control" name="order_tax_rate">
@@ -251,9 +297,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 ">
                                         <div class="form-group">
-                                            <label>{{trans('file.Order Discount Type')}}</label>
+                                            <label>{{trans('Discount Type')}}</label>
                                             <select id="order-discount-type" name="order_discount_type" class="form-control">
                                               <option value="Flat">{{trans('file.Flat')}}</option>
                                               <option value="Percentage">{{trans('file.Percentage')}}</option>
@@ -262,7 +308,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>{{trans('file.Value')}}</label>
+                                            <label>{{trans('Discount Value')}}</label>
                                             <input type="text" name="order_discount_value" class="form-control numkey" id="order-discount-val">
                                             <input type="hidden" name="order_discount" class="form-control" id="order-discount">
                                         </div>
@@ -270,12 +316,12 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>
-                                                {{trans('file.Shipping Cost')}}
+                                                {{trans('Transportation Cost')}}
                                             </label>
                                             <input type="number" name="shipping_cost" class="form-control" step="any"/>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 d-none">
                                         <div class="form-group">
                                             <label>{{trans('file.Attach Document')}}</label> <i class="dripicons-question" data-toggle="tooltip" title="Only jpg, jpeg, png, gif, pdf, csv, docx, xlsx and txt file is supported"></i>
                                             <input type="file" name="document" class="form-control" />
@@ -1255,27 +1301,32 @@ function productSearch(data) {
                     cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
                     cols += '<td>' + data[1] + '</td>';
                     cols += '<td><input type="text" class="form-control qty" name="qty[]" value="'+data[15]+'" required/></td>';
-                    if(data[12]) {
-                        // cols += '<td><input type="text" class="form-control batch-no" value="'+batch_no[pos]+'" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]" value="'+product_batch_id[pos]+'"/> </td>';
-                        // cols += '<td><select class="form-control batch-no1" name="product_batch_id1[]" required><option value="7">Batch 1</option><option value="8">Batch 2</option><option value="9">Batch 3</option></select><input type="text" class="form-control batch-no d-none" value="7" required /><input type="hidden" class="product-batch-id" name="product_batch_id[]" value="7"/></td>';
-                        cols += '<td><select class="form-control batch-no1" name="product_batch_id1[]" required></select>';
-                        cols += '<input type="text" class="form-control batch-no d-none" value="" required />';
-                        cols += '<input type="hidden" class="product-batch-id" name="product_batch_id[]" value=""/></td>';
+                    cols += '<td>' + data[6] + '</td>';
 
-                        cols += '<td class="expired-date">'+expired_date[pos]+'</td>';
-                        cols += '<td class="net_unit_price">'+product_price[pos]+'</td>';
-                    }
-                    else {
-                        cols += '<td><input type="text" class="form-control batch-no" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
-                        cols += '<td class="expired-date">N/A</td>';
-                        cols += '<td class="net_unit_price"></td>';
-                    }
-
-                    // cols += '<td class="net_unit_price"></td>';
+                    cols += '<td class="net_unit_price"></td>';
                     cols += '<td class="discount">{{number_format(0, $general_setting->decimal, '.', '')}}</td>';
                     cols += '<td class="tax"></td>';
                     cols += '<td class="sub-total"></td>';
                     cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
+
+
+                    if(data[12]) {
+                        // cols += '<td><input type="text" class="form-control batch-no" value="'+batch_no[pos]+'" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]" value="'+product_batch_id[pos]+'"/> </td>';
+                        // cols += '<td><select class="form-control batch-no1" name="product_batch_id1[]" required><option value="7">Batch 1</option><option value="8">Batch 2</option><option value="9">Batch 3</option></select><input type="text" class="form-control batch-no d-none" value="7" required /><input type="hidden" class="product-batch-id" name="product_batch_id[]" value="7"/></td>';
+                        cols += '<td><select class="form-control batch-no1 d-none" name="product_batch_id1[]" required></select>';
+                        cols += '<input type="text" class="form-control batch-no d-none" value="" required />';
+                        cols += '<input type="hidden" class="product-batch-id d-none" name="product_batch_id[]" value=""/></td>';
+
+                        cols += '<td class="expired-date d-none">'+expired_date[pos]+'</td>';
+                        cols += '<td class="net_unit_price d-none">'+product_price[pos]+'</td>';
+                    }
+                    else {
+                        cols += '<td><input type="text" class="form-control batch-no d-none" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
+                        cols += '<td class="expired-date d-none">N/A</td>';
+                        cols += '<td class="net_unit_price d-none"></td>';
+                    }
+
+
                     cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
                     cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
                     cols += '<input type="hidden" class="sale-unit" name="sale_unit[]" value="' + temp_unit_name[0] + '"/>';
@@ -1929,4 +1980,28 @@ $(document).on('submit', '.payment-form', function(e) {
 });
 </script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#company_id').on('change', function () {
+            let companyId = $(this).val();
+            $('#customer_id').html('<option value="">Loading...</option>').prop('disabled', true).selectpicker('refresh');
+
+            if (companyId) {
+                $.ajax({
+                    url: "{{ url('get-customers-by-company') }}/" + companyId,
+                    type: 'GET',
+                    success: function (response) {
+                        let options = '<option value="">Select customer...</option>';
+                        response.forEach(customer => {
+                            options += `<option value="${customer.id}">${customer.name} (${customer.phone_number})</option>`;
+                        });
+                        $('#customer_id').html(options).prop('disabled', false).selectpicker('refresh');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 @endpush

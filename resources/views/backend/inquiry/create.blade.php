@@ -28,7 +28,7 @@
                 </div>
 
                 <!-- Area Dropdown -->
-                <div class="col-md-6 mb-3">
+                {{--<div class="col-md-6 mb-3">
                     <label>Area <span class="text-danger">*</span></label>
                     <select name="area" id="area" class="form-control" required>
                         <option value="">Select Area</option>
@@ -44,24 +44,24 @@
                     <select name="group_name" id="group_name" class="form-control" required>
                         <option value="">Select Group Name</option>
                     </select>
-                </div>
+                </div>--}}
 
                 <!-- Company Name Dropdown -->
                 <div class="col-md-6 mb-3">
                     <label>Company Name <span class="text-danger">*</span></label>
                     <select name="company_name" id="company_name" class="form-control" required>
-                        <option value="">Select Company Name</option>
+                        <option value=" " selected disabled>Select Company Name</option>
+                        @foreach($companies as $company)
+                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        @endforeach
                     </select>
                 </div>
 
-                <!-- Contact Person -->
-                <!-- Contact Person Dropdown -->
                 <!-- Contact Person Dropdown -->
                 <div class="col-md-6 mb-3">
                     <label>Contact Person <span class="text-danger">*</span></label>
                     <select name="customer_id" id="contact_person" class="form-control" required>
                         <option value="">Select Contact Person</option>
-                        <!-- Options will be populated dynamically -->
                     </select>
                     <input type="hidden" name="contact_person" id="contact_person_name">
                 </div>
@@ -194,26 +194,28 @@
             }
         });
         $('#company_name').on('change', function() {
-    var company = $(this).val();
-    if(company) {
-        $.ajax({
-            url: '{{ route("getContactPerson") }}',
-            type: 'GET',
-            data: { company_name: company },
-            success: function(data) {
-                let $personSelect = $('#contact_person');
-                $personSelect.empty().append('<option value="">Select Contact Person</option>');
+            var company = $(this).val();
 
-                $.each(data, function(index, person) {
-                    let displayText = `${person.name} (${person.phone_number})`;
-                    $personSelect.append(`<option value="${person.id}" data-name="${person.name}">${displayText}</option>`);
+            if(company) {
+
+                $.ajax({
+                    url: '{{ route("getContactPerson") }}',
+                    type: 'GET',
+                    data: { company_name: company },
+                    success: function(data) {
+                        let $personSelect = $('#contact_person');
+                        $personSelect.empty().append('<option value="">Select Contact Person</option>');
+
+                        $.each(data, function(index, person) {
+                            let displayText = `${person.name} (${person.phone_number})`;
+                            $personSelect.append(`<option value="${person.id}" data-name="${person.name}">${displayText}</option>`);
+                        });
+                    }
                 });
+            } else {
+                $('#contact_person').empty().append('<option value="">Select Contact Person</option>');
             }
         });
-    } else {
-        $('#contact_person').empty().append('<option value="">Select Contact Person</option>');
-    }
-});
 
 // Set contact person name into hidden field when selected
 $('#contact_person').on('change', function () {

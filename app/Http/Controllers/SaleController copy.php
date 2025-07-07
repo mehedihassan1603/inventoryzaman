@@ -138,6 +138,7 @@ class SaleController extends Controller
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_account_list = Account::where('is_active', true)->get();
             $lims_courier_list = Courier::where('is_active', true)->get();
+            // dd($companies);
             if($lims_pos_setting_data)
                 $options = explode(',', $lims_pos_setting_data->payment_options);
             else
@@ -160,6 +161,7 @@ class SaleController extends Controller
 
     public function saleData(Request $request)
     {
+        // dd($request->all());
         $columns = array(
             1 => 'created_at',
             2 => 'reference_no',
@@ -3010,7 +3012,6 @@ class SaleController extends Controller
     {
         $lims_sale_data = Sale::find($id);
 
-
         $lims_product_sale_data = Product_Sale::where('sale_id', $id)->get();
         if(cache()->has('biller_list'))
         {
@@ -3034,9 +3035,6 @@ class SaleController extends Controller
         else{
             $lims_customer_data = Customer::find($lims_sale_data->customer_id);
         }
-// dd($lims_customer_data);
-        $lims_company_data = Company::findOrFail($lims_customer_data->company_name);
-        // dd($lims_company_data);
 
         $lims_payment_data = Payment::where('sale_id', $id)->get();
         if(cache()->has('pos_setting'))
@@ -3157,16 +3155,16 @@ class SaleController extends Controller
         // return [$lims_sale_data, $currency_code, $lims_product_sale_data, $lims_biller_data, $lims_warehouse_data, $lims_customer_data, $lims_payment_data, $numberInWords, $paid_by_info, $sale_custom_fields, $customer_custom_fields, $product_custom_fields, $qrText, $totalDue];
 
         if($lims_pos_setting_data->invoice_option == 'A4') {
-            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'lims_company_data','currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
         elseif($lims_sale_data->sale_type == 'online'){
-            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'lims_company_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
         elseif($lims_pos_setting_data->invoice_option == 'thermal' && $lims_pos_setting_data->thermal_invoice_size == '58'){
-            return view('backend.sale.invoice58', compact('lims_sale_data', 'lims_company_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.invoice58', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
         else{
-            return view('backend.sale.invoice', compact('lims_sale_data', 'lims_company_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
         }
     }
 

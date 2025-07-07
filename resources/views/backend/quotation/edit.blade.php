@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
+                                        <div class="form-group d-none">
                                             <label>{{trans('file.Supplier')}}</label>
                                             <input type="hidden" name="supplier_id_hidden" value="{{ $lims_quotation_data->supplier_id }}" />
                                             <select name="supplier_id" class="selectpicker form-control" data-live-search="true" id="supplier-id" title="Select supplier...">
@@ -254,7 +254,7 @@
                                 <div class="row mt-2">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>{{trans('file.Order Tax')}}</label>
+                                            <label>{{trans('Vat')}}</label>
                                             <input type="hidden" name="order_tax_rate_hidden" value="{{$lims_quotation_data->order_tax_rate}}">
                                             <select class="form-control" name="order_tax_rate">
                                                 <option value="0">{{trans('file.No Tax')}}</option>
@@ -267,7 +267,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>
-                                                <strong>{{trans('file.Order Discount')}}</strong>
+                                                <strong>{{trans('Discount')}}</strong>
                                             </label>
                                             <input type="number" name="order_discount" class="form-control" value="{{$lims_quotation_data->order_discount}}" step="any"/>
                                         </div>
@@ -275,7 +275,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>
-                                                <strong>{{trans('file.Shipping Cost')}}</strong>
+                                                <strong>{{trans('Transportation')}}</strong>
                                             </label>
                                             <input type="number" name="shipping_cost" class="form-control" value="{{$lims_quotation_data->shipping_cost}}" step="any"/>
                                         </div>
@@ -332,13 +332,13 @@
             <td><strong>{{trans('file.Total')}}</strong>
                 <span class="pull-right" id="subtotal">{{number_format(0, $general_setting->decimal, '.', '')}}</span>
             </td>
-            <td><strong>{{trans('file.Order Tax')}}</strong>
+            <td><strong>{{trans('Vat')}}</strong>
                 <span class="pull-right" id="order_tax">{{number_format(0, $general_setting->decimal, '.', '')}}</span>
             </td>
-            <td><strong>{{trans('file.Order Discount')}}</strong>
+            <td><strong>{{trans('Discount')}}</strong>
                 <span class="pull-right" id="order_discount">{{number_format(0, $general_setting->decimal, '.', '')}}</span>
             </td>
-            <td><strong>{{trans('file.Shipping Cost')}}</strong>
+            <td><strong>{{trans('Transportation')}}</strong>
                 <span class="pull-right" id="shipping_cost">{{number_format(0, $general_setting->decimal, '.', '')}}</span>
             </td>
             <td><strong>{{trans('file.grand total')}}</strong>
